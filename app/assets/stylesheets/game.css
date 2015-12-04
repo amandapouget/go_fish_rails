@@ -1,0 +1,225 @@
+body {
+  background-color: #0f2a4c;
+  color: white;
+  padding: 5px;
+  font-size: 1.5em;
+  font-family: 'Lato';
+}
+
+header {
+  width: 100%;
+}
+
+footer {
+  width: 100%;
+  text-align: center;
+}
+
+.form input[type="text"] {
+  margin: 20px;
+  border:5px solid #FFFDD0;
+  border-radius: 8px;
+  font-size: 1em;
+  color: white;
+  font-family: 'Lato';
+  background: #003366;
+  padding: 5px;
+}
+
+.radio-buttons {
+  list-style-type:none;
+  margin: 25px 0px;
+  padding: 0;
+}
+
+.radio-buttons li {
+  display: inline-block;
+  margin: 0px 10px;
+  width:100px;
+  height: 50px;
+  position: relative;
+}
+
+.radio-buttons label, .radio-buttons input {
+  display:block;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+}
+
+.radio-buttons input[type="radio"] {
+  opacity:0.011;
+  z-index:100;
+}
+
+.radio-buttons input[type="radio"]:checked + label {
+  background: #003366;
+}
+
+.radio-buttons label {
+  padding:5px;
+  border:5px solid #FFFDD0;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index:90;
+}
+
+.radio-buttons label:hover {
+  background: #3f2a14;
+}
+
+h1 {
+  -webkit-margin-before: 0.1em;
+  -webkit-margin-after: 0.1em;
+  color: #FFFDD0;
+  text-align: center;
+  font-family: 'Rock Salt', cursive;
+  font-size: 3em;
+}
+
+h2 {
+  -webkit-margin-before: 0.1em;
+  -webkit-margin-after: 0.1em;
+  color: #FFFDD0;
+  text-align: center;
+  font-family: 'Rock Salt', cursive;
+  font-size: 2em;
+  line-height: 80px;
+}
+
+.button {
+  display: inline-block;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #FFFDD0;
+  font-size: 1em;
+  font-family: 'Lato';
+  color: #654321;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h4 {
+  margin: 0 0 10px 0;
+}
+
+.game {
+  border: 5px solid #FFFDD0;
+  border-radius: 25px;
+  background-color: #654321;
+  padding: 5px 5px 5px 5px;
+  margin: auto;
+  width: 80%;
+  text-align: center;
+}
+
+.opponents {
+  margin: auto;
+}
+
+.opponents .player {
+  display: inline-block;
+  margin: 20px;
+  cursor: pointer;
+}
+.opponents .player img{
+  width: 71px;
+  height: 96px;
+}
+
+.pond {
+  margin: auto;
+}
+
+.pond #speech {
+  height: 200px;
+  width: 296px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url("/assets/speech.png") no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.pond #speech #message {
+  width: 237px;
+  float: left;
+  padding: 10px 12px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  color: #3f2a14;
+  font-size: 1em;
+  word-wrap: break-word;
+}
+
+.pond #create_pond {
+  color: #3f2a14;
+  word-wrap: break-word;
+  line-height: 45px;
+}
+
+.pond #fish_blue {
+  height: 200px;
+  width: 310px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url("/assets/fish_blue.png") no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  cursor: pointer;
+}
+
+.info-for-player {
+  vertical-align: top;
+  margin: auto;
+}
+.info-for-player .score {
+  vertical-align: top;
+  display: inline-block;
+  margin: 20px;
+}
+
+.info-for-player #scores {
+  margin: 0 auto;
+}
+
+.info-for-player #scores h4 {
+  margin: 0 0 5px 0;
+}
+
+.info-for-player .score img{
+  width: 71px;
+  height: 96px;
+}
+
+.info-for-player .player {
+  display: inline-block;
+  margin: 20px;
+  max-width: 537px;
+}
+
+.info-for-player .player img{
+  width: 71px;
+  height: 96px;
+}
+
+.info-for-player .your-cards {
+  cursor: pointer;
+}
+
+#no_player_message {
+  margin: 10px;
+}
+
+@media only screen and (max-width: 500px) {
+  .middle-item, .box-small {
+    float: left;
+    width: 100%;
+    margin: 20px 0;
+  }
+}

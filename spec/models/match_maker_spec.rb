@@ -28,4 +28,10 @@ describe MatchMaker do
     match = match_maker.match(another_user, 2)
     expect(match).to be_nil
   end
+
+  it 'can reset the pending_users to empty' do
+    match_maker.match(user, 3)
+    match_maker.reset
+    expect(match_maker.pending_users).to eq Hash.new
+  end
 end

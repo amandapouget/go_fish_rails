@@ -1,0 +1,10 @@
+script src="/assets/ready_tracker.js"
+script src="/assets/game_wait.js"
+
+h2 Waiting for players...
+div id="game_info" data-user_id=@user.id data-num_players= @num_players
+div class="form"
+  form action='/start_with_robots' method='post' id='robot_form'
+    input type='hidden' name='user_id' value=@user.id
+    input type='hidden' name='num_players' value=@num_players
+br

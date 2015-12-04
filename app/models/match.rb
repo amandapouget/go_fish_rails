@@ -1,6 +1,6 @@
-require_relative 'game'
-require_relative 'player'
-require_relative 'user'
+require 'game'
+require 'player'
+require 'user'
 
 class Match < ActiveRecord::Base
   has_many :participations

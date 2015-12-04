@@ -8,4 +8,8 @@ class MatchMaker
   def pending_users
     @pending_users ||= Hash.new {|hash, key| hash[key] = []}
   end
+
+  def reset
+    @pending_users = Hash.new {|hash, key| hash[key] = []}
+  end
 end
