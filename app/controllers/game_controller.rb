@@ -17,8 +17,9 @@ class GameController < ApplicationController
   end
 
   def subscribed
-    this_user = User.find(params["user_id"].to_i)
-    match = this_user.matches.sort_by { |match| match.created_at }.last
+    user = User.find(params["user_id"].to_i)
+    match = user.matches.sort_by { |match| match.created_at }.last
+    binding.pry
     match.users.each { |user| push(match, user) } if match
     render json: nil, status: :ok
   end
