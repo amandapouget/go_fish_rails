@@ -64,10 +64,9 @@ RSpec.describe GameController, type: :controller do
     it 'triggers a push' do
       user = create(:user)
       match = create(:match, users: [user, create(:user)])
-      binding.pry
-      allow(self).to receive(:push).and_return nil
+      allow(controller).to receive(:push).and_return nil
+      expect(controller).to receive(:push)
       post :subscribed, { user_id: user.id }
-      expect(self).to receive(:push)
     end
   end
 
