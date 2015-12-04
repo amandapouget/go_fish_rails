@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Over:
+  = @match.over
+p
+  strong Message:
+  = @match.message
+p
+  strong Hand size:
+  = @match.hand_size
+p
+  strong Game:
+  = @match.game
+
+= link_to 'Edit', edit_match_path(@match)
+'|
+= link_to 'Back', matches_path

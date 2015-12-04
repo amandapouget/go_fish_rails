@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @user.name
+p
+  strong Type:
+  = @user.type
+p
+  strong Think time:
+  = @user.think_time
+
+= link_to 'Edit', edit_user_path(@user)
+'|
+= link_to 'Back', users_path

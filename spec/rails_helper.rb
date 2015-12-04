@@ -7,6 +7,22 @@ require 'spec_helper'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rails'
+require 'pry-byebug'
+require 'socket'
+require 'factory_girl_rails'
+
+Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
+
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+  config.after(:all) do
+    Match.destroy_all
+    User.destroy_all
+  end
+  # ActiveRecord::Base.add_observer MatchClientNotifier.instance
+end
+
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
