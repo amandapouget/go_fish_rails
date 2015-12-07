@@ -1,6 +1,7 @@
 class Match < ActiveRecord::Base
   has_many :participations
   has_many :users, :through => :participations
+  belongs_to :winner, class_name: 'User', foreign_key: 'winner_id'
   serialize :game
   after_create :set_defaults, :save
 
@@ -8,7 +9,7 @@ class Match < ActiveRecord::Base
 
   def set_defaults
     self.game ||= Game.new(players: self.users.map { |user| Player.new(name: user.name, user_id: user.id) }, hand_size: self.hand_size)
-    self.game.next_turn = game.players.find { |player| user(player).is_a? RealUser } if game.requests.length == 0
+    self.game.next_turn = self.game.players.find { |player| user(player).is_a? RealUser } if game.requests.length == 0
     self.message ||= game.next_turn.name + FIRST_PROMPT
   end
 
@@ -78,6 +79,12 @@ class Match < ActiveRecord::Base
   end
 
   def end_match
+    winner = user(game.winner)
+    real_user_won = winner.is_a? RealUser
+    if real_user_won # sorry can't figure out how to have the nullobject pattern without this
+      self.winner = winner
+      Participation.set_points(self)
+    end
     update_column(:over, true)
   end
 end

@@ -21,4 +21,11 @@ describe User do
     match_recent.end_match
     expect(user.current_match).to eq nil
   end
+
+  it 'knows how many points it has earned' do
+    expect(user.points).to eq 0
+    match_recent.game.winner = match_recent.player(user)
+    match_recent.end_match
+    expect(user.points).to be > 0
+  end
 end

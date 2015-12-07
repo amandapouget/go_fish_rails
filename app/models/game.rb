@@ -3,7 +3,8 @@ class Game
   Game::MAX_PLAYERS = 5
   Game::PLAYER_RANGE = (Game::MIN_PLAYERS..Game::MAX_PLAYERS)
 
-  attr_accessor :players, :deck, :hand_size, :winner, :requests, :next_turn
+  attr_accessor :players, :deck, :hand_size, :requests, :next_turn
+  attr_writer :winner
 
   def initialize(players: [], hand_size: 5)
     @players = players.size >= Game::MIN_PLAYERS ? players : Array.new(Game::MIN_PLAYERS) { Player.new }
@@ -21,7 +22,7 @@ class Game
   end
 
   def winner
-    game_over? ? player_with_most_books : NullPlayer.new
+    @winner ||= game_over? ? player_with_most_books : NullPlayer.new
   end
 
   def player_with_most_books

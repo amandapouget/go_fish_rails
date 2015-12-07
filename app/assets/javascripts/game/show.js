@@ -55,7 +55,7 @@ $(document).ready(function() {
           opponentsDiv.appendChild(opponentDiv);
           this.insertPlayer(opponentDiv, opponent.name, opponent.icon);
           var book = document.createElement('img');
-          book.src = '/images/cards/backs_blue.png';
+          book.src = '/assets/cards/backs_blue.png';
           opponentDiv.appendChild(book);
         }.bind(this));
         this.listenForOpponentSelection();
@@ -85,7 +85,7 @@ $(document).ready(function() {
       var booksDiv = document.getElementById('books');
       var num_books_to_add = books.length - booksDiv.children.length + 1;
       var book = document.createElement('img');
-      book.src = '/images/cards/backs_blue.png';
+      book.src = '/assets/cards/backs_blue.png';
       for (i = 0; i < num_books_to_add; i++) {
         booksDiv.appendChild(book);
       }
@@ -116,14 +116,12 @@ $(document).ready(function() {
     }
 
     PlayerView.prototype.refresh = function() {
-      debugger;
       $.ajax({
          url: '/' + this.matchId + '/player/' + this.userId + '.json',
          dataType: 'json',
-         complete: function(data){
+         complete: function(gameInfo){
          },
-         success: function(data){
-           var gameInfo = JSON.parse(data);
+         success: function(gameInfo){
            this.setMessage(gameInfo.message);
            this.setScores(gameInfo.scores);
            this.setOpponents(gameInfo.opponents);

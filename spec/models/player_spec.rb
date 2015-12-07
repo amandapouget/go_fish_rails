@@ -8,8 +8,7 @@ describe Player do
       expect(player.name).to eq "John"
       expect(player.cards).to eq []
       expect(player.books).to eq []
-      icons = Dir.glob("./app/assets/images/players/*.png")
-      expect(icons).to include "#{player.icon}"
+      expect(player.icon).to be > ""
     end
 
     it 'defaults to Anonymous if no name is given' do

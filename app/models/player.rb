@@ -12,7 +12,8 @@ class Player
   end
 
   def set_icon
-    @@icons.rotate![0].sub(/^.\/public/,'')
+    icon = @@icons.rotate![0].sub(/.\/app\/assets\/images\//,'')
+    icon = "/assets/#{icon}"
   end
 
   def give_cards(rank)

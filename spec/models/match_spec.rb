@@ -152,4 +152,19 @@ describe Match do
     match.end_match
     expect(match.over).to be true
   end
+
+  it 'can tell you who won the game' do
+    user = users[0]
+    match.game.winner = match.player(user)
+    match.end_match
+    expect(match.winner).to eq user
+  end
+
+  it 'adds points to the winner' do
+    user = users[0]
+    old_point_total = user.points
+    match.game.winner = match.player(user)
+    match.end_match
+    expect(user.points).to be > old_point_total
+  end
 end

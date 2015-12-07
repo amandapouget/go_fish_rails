@@ -18,6 +18,7 @@ RSpec.configure do |config|
   config.after(:all) do
     Match.destroy_all
     User.destroy_all
+    Participation.destroy_all
   end
   # ActiveRecord::Base.add_observer MatchClientNotifier.instance
 end

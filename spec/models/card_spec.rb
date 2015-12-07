@@ -6,7 +6,7 @@ describe Card do
       my_card = Card.new(rank: "seven", suit: "clubs")
       expect(my_card.rank).to eq "seven"
       expect(my_card.suit).to eq "clubs"
-      expect(my_card.icon).to eq "/images/cards/c7.png"
+      expect(my_card.icon).to be > ""
     end
   end
 
@@ -85,13 +85,13 @@ describe Card do
 
     describe '#to_json' do
       it 'returns hash of rank and suit' do
-        expect(card_7s.to_json).to eq("{\"rank\":\"seven\",\"suit\":\"spades\",\"icon\":\"/images/cards/s7.png\"}")
+        expect(card_7s.to_json).to eq("{\"rank\":\"seven\",\"suit\":\"spades\",\"icon\":\"/assets/cards/s7.png\"}")
       end
     end
 
     describe '#set_icon' do
       it 'returns an icon image path based on the rank and suit of the card' do
-        expect(card_7s.set_icon).to eq Card::ICON_SOURCE_PATH + "#{card_7s.suit[0]}#{card_7s.rank_value}.png"
+        expect(card_7s.set_icon).to eq "/assets/cards/#{card_7s.suit[0]}#{card_7s.rank_value}.png"
       end
 
       it 'returns nil for irregular cards' do

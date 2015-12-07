@@ -1,7 +1,6 @@
 class Card
   attr_reader :rank, :suit, :icon
 
-  ICON_SOURCE_PATH = "/images/cards/"
   RANKS = ["two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "jack", "queen", "king", "ace"]
   SUITS = ["clubs", "diamonds", "hearts", "spades"]
 
@@ -36,6 +35,6 @@ class Card
   end
 
   def set_icon
-    "#{ICON_SOURCE_PATH}#{suit[0]}#{rank_value}.png" if rank_value > 1 && SUITS.include?(suit)
+    "/assets/cards/#{suit[0]}#{rank_value}.png" if rank_value > 1 && SUITS.include?(suit)
   end
 end
