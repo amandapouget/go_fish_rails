@@ -9,6 +9,21 @@ p
 p
   strong Think time:
   = @user.think_time
+p
+  strong History
+  table
+    thead
+      tr
+        th Datetime
+        th Won/Lost
+        th Points
+
+    tbody
+      - @user.matches.each do |match|
+        tr
+          td = match.updated_at
+          td = match.winner == @user
+          td = Participation.find_by_match_and_user(match, @user).points
 
 = link_to 'Edit', edit_user_path(@user)
 '|
