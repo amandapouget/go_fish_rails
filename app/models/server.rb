@@ -1,8 +1,4 @@
 require 'socket'
-require_relative 'game'
-require_relative 'player'
-require_relative 'user'
-require_relative 'match'
 
 class Server
   attr_accessor :port, :socket, :pending_users, :clients, :game

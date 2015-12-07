@@ -1,7 +1,3 @@
-require_relative 'player'
-require_relative 'card'
-require_relative 'rank_request'
-
 class Game
   Game::MIN_PLAYERS = 2
   Game::MAX_PLAYERS = 5

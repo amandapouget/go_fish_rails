@@ -3,7 +3,7 @@ require 'pry'
 
 class GameController < ApplicationController
   Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
-  MyMatchMaker ||= MatchMaker.new
+  # extract to Pusher class
 
   def index
     @player_range = Game::PLAYER_RANGE
@@ -51,11 +51,11 @@ class GameController < ApplicationController
     return nil
   end
 
-  protected
-    def match_maker
-      MyMatchMaker
-    end
+  def match_maker
+    @match_maker ||= MatchMaker.new
+  end
 
+  protected
     def start(match)
       match.game.deal
       match.save

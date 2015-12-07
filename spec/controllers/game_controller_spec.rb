@@ -14,7 +14,7 @@ RSpec.describe GameController, type: :controller do
     end
 
     def reset_match_maker
-      GameController::MyMatchMaker.reset
+      controller.match_maker.reset
     end
 
     it 'creates a new User' do

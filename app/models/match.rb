@@ -1,7 +1,3 @@
-require 'game'
-require 'player'
-require 'user'
-
 class Match < ActiveRecord::Base
   has_many :participations
   has_many :users, :through => :participations

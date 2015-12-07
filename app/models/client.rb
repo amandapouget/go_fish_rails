@@ -1,6 +1,5 @@
 require 'socket'
 require 'json'
-require_relative './match.rb'
 
 class Client
   attr_reader :socket

@@ -1,5 +1,3 @@
-require_relative 'card'
-
 class Deck
   attr_accessor :cards, :type
 
