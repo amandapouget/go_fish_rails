@@ -21,7 +21,7 @@ module FreshGameCreate
   end
 
   def visit_player_page
-    visit "/#{@my_match.id}/player/#{me_player.user_id}"
+    visit "/#{@my_match.id}/player/#{me_player.id}"
     expect_page_ready
   end
 
@@ -88,7 +88,7 @@ module GamePlay
   def make_it_someones_turn(player)
     @my_match.game.next_turn = player
     save_and_reload
-    expect(@my_match.game.next_turn.user_id).to eq player.user_id
+    expect(@my_match.game.next_turn.id).to eq player.id
   end
 
   def have_king(players)
@@ -108,8 +108,8 @@ module GamePlay
   def make_opponent_request(match, player, opponent, rank)
     params = {
       'matchId' => match.id,
-      'playerUserId' => player.user_id,
-      'opponentUserId' => opponent.user_id,
+      'playerUserId' => player.id,
+      'opponentUserId' => opponent.id,
       'rank' => rank
     }
     post("/card_request", params)

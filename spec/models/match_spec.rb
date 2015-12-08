@@ -70,7 +70,7 @@ describe Match do
     expect(view["message"]).to eq match.message
     expect(view["player"]).to eq JSON.parse(players[0].to_json)
     expect(view["player_index"]).to eq 0
-    expect(view["opponents"]).to eq match.opponents(players[0]).map { |opponent| {"user_id" => opponent.user_id, "name" => opponent.name, "icon" => opponent.icon} }
+    expect(view["opponents"]).to eq match.opponents(players[0]).map { |opponent| {"id" => opponent.id, "name" => opponent.name, "icon" => opponent.icon} }
     expect(view["scores"]).to eq players.map { |player| [player.name, player.books.size] }.push(["Fish Left", match.game.deck.count_cards])
   end
 

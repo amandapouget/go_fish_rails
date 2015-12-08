@@ -43,7 +43,7 @@ class Game
   end
 
   def advance_turn
-    next_player_index = @players.index { |player| player.user_id == @next_turn.user_id } + 1
+    next_player_index = @players.index { |player| player.id == @next_turn.id } + 1
     @next_turn = @players[next_player_index % @players.size]
   end
 

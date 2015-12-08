@@ -51,7 +51,7 @@ $(document).ready(function() {
           var opponentDiv = document.createElement('div');
           opponentDiv.className = "player";
           opponentDiv.id = "opponent_" + index;
-          opponentDiv.setAttribute("data-user-id", opponent.user_id);
+          opponentDiv.setAttribute("data-user-id", opponent.id);
           opponentsDiv.appendChild(opponentDiv);
           this.insertPlayer(opponentDiv, opponent.name, opponent.icon);
           var book = document.createElement('img');

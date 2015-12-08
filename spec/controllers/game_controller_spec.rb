@@ -55,7 +55,7 @@ RSpec.describe GameController, type: :controller do
   describe 'POST #subscribed' do
     it 'returns nil' do
       user = create(:user)
-      response = post :subscribed, { user_id: user.id }
+      response = post :subscribed, { id: user.id }
       expect(response).to be_success
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe GameController, type: :controller do
       match = create(:match, users: [user, create(:user)])
       allow(controller).to receive(:push).and_return nil
       expect(controller).to receive(:push)
-      post :subscribed, { user_id: user.id }
+      post :subscribed, { id: user.id }
     end
   end
 

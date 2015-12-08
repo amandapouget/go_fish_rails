@@ -8,7 +8,7 @@ class Match < ActiveRecord::Base
   FIRST_PROMPT = ", click card, player & me to request cards!"
 
   def set_defaults
-    self.game ||= Game.new(players: self.users.map { |user| Player.new(name: user.name, user_id: user.id) }, hand_size: self.hand_size)
+    self.game ||= Game.new(players: self.users.map { |user| Player.new(name: user.name, id: user.id) }, hand_size: self.hand_size)
     self.game.next_turn = self.game.players.find { |player| user(player).is_a? RealUser } if game.requests.length == 0
     self.message ||= game.next_turn.name + FIRST_PROMPT
   end
@@ -26,15 +26,15 @@ class Match < ActiveRecord::Base
   end
 
   def user(player)
-    User.find_by_id(player.user_id) || NullUser.new
+    User.find_by_id(player.id) || NullUser.new
   end
 
   def player(user)
-    players.find { |player| player.user_id == user.id } || NullPlayer.new
+    players.find { |player| player.id == user.id } || NullPlayer.new
   end
 
   def opponents(player)
-    players.clone.tap { |players| players.rotate!(players.index{ |available_player| available_player.user_id == player.user_id}).shift }
+    players.clone.tap { |players| players.rotate!(players.index{ |available_player| available_player.id == player.id}).shift }
   end
 
   def player_from_name(name)
@@ -46,13 +46,13 @@ class Match < ActiveRecord::Base
       message: self.message,
       player: player,
       player_index: players.index(player),
-      opponents: opponents(player).map { |opponent| {user_id: opponent.user_id, name: opponent.name, icon: opponent.icon} },
+      opponents: opponents(player).map { |opponent| {id: opponent.id, name: opponent.name, icon: opponent.icon} },
       scores: players.map { |player| [player.name, player.books.size] }.push(["Fish Left", game.deck.count_cards])
     }.to_json
   end
 
   def run_play(player, opponent, rank) # would belong in a controller in a rails app
-    if game.next_turn.user_id == player.user_id
+    if game.next_turn.id == player.id
       execute_turn(player, opponent, rank)
       save
       notify_observers

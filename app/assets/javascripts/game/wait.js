@@ -21,7 +21,7 @@ $(document).ready(function() {
       var channel = pusher.subscribe('waiting_for_players_channel_' + userId);
 
       channel.bind('pusher:subscription_succeeded', function() {
-        $.post('/subscribed', { user_id: userId, num_players: numberOfPlayers });
+        $.post('/subscribed', { id: userId, num_players: numberOfPlayers });
         waitingView.setPlayWithRobots();
         readyTracker.setReadyOn();
       });

@@ -1,10 +1,10 @@
 class Player
-  attr_accessor :name, :cards, :books, :icon, :user_id
+  attr_accessor :name, :cards, :books, :icon, :id
 
   @@icons = Dir.glob("./app/assets/images/players/*.png")
 
-  def initialize(name: "Anonymous", user_id: nil)
-    @user_id = user_id
+  def initialize(name: "Anonymous", id: nil)
+    @id = id
     @name = name
     @cards = []
     @books = []
@@ -61,7 +61,7 @@ private
 end
 
 class NullPlayer < Player
-  attr_accessor :name, :cards, :books, :user_id
+  attr_accessor :name, :cards, :books, :id
 
   def initialize
     @name = "none"

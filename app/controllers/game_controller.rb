@@ -33,7 +33,7 @@ class GameController < ApplicationController
 
   def show
     @match = Match.find_by_id(params["match_id"].to_i)
-    @player = @match.players.find { |player| player.user_id == params["user_id"].to_i } if @match
+    @player = @match.players.find { |player| player.id == params["id"].to_i } if @match
     if @player && params['format'] == 'json'
       render json: @match.view(@player)
     elsif @player
@@ -45,8 +45,8 @@ class GameController < ApplicationController
 
   def card_request
     match = Match.find_by_id(params["matchId"].to_i)
-    opponent = match.players.find { |player| player.user_id == params["opponentUserId"].to_i }
-    player = match.players.find { |player| player.user_id == params["playerUserId"].to_i }
+    opponent = match.players.find { |player| player.id == params["opponentUserId"].to_i }
+    player = match.players.find { |player| player.id == params["playerUserId"].to_i }
     match.run_play(player, opponent, params["rank"])
     render json: nil, status: :ok
   end

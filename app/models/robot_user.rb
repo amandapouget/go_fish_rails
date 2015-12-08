@@ -8,7 +8,7 @@ class RobotUser < User
 
   def make_play(match)
     @match = match
-    if (match.game.next_turn.user_id == id && !match.over)
+    if (match.game.next_turn.id == id && !match.over)
       contemplate_before { match.run_play(player, pick_opponent, pick_rank) }
     end
   end
