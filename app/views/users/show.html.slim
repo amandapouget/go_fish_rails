@@ -23,7 +23,7 @@ p
         tr
           td = match.updated_at
           td = match.winner == @user
-          td = Participation.find_by_match_and_user(match, @user).points
+          td = Participation.find_by(match: match, user: @user).points
 
 = link_to 'Edit', edit_user_path(@user)
 '|

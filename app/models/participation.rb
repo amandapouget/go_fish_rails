@@ -11,6 +11,6 @@ class Participation < ActiveRecord::Base
   end
 
   def self.find_by_match_and_user(match, user)
-    self.find { |participation| (participation.match == match) && (participation.user == user) }
+    Participation.find_by(match_id: match.id, user_id: user.id)
   end
 end
