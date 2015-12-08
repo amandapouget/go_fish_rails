@@ -12,6 +12,12 @@ class NullUser
   def current_match
   end
 
+  def id
+  end
+
+  def update_attribute
+  end
+
   def eql?(nulluser)
     nulluser.is_a? NullUser
   end
