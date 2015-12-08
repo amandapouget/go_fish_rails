@@ -6,7 +6,7 @@ def current_match
 end
 
 describe User do
-  let(:user) { create(:user) }
+  let(:user) { create(:real_user) }
   let(:match_recent) { create(:match, users: [user, create(:robot_user)]) }
   let(:match_old) { create(:match, users: [user, create(:real_user)]) }
 
@@ -23,7 +23,6 @@ describe User do
   end
 
   it 'knows how many points it has earned' do
-    expect(user.points).to eq 0
     match_recent.game.winner = match_recent.player(user)
     match_recent.end_match
     expect(user.points).to be > 0

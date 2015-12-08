@@ -10,12 +10,8 @@ describe Participation do
     expect(participation.user).to eq user
     expect(participation.match).to eq match
   end
-  it 'tracks participation result, including (potentially weighted) points earned' do # could track tournament - match - user link
+  it 'tracks the points earned' do
     expect(participation.points).to eq 0
-    match.winner = user
-    Participation.set_points(match)
-    participation.reload
-    expect(participation.points).to eq 1
   end
   it 'can be used to tell you user rankings' do
 

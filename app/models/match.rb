@@ -83,7 +83,7 @@ class Match < ActiveRecord::Base
     real_user_won = winner.is_a? RealUser
     if real_user_won # sorry can't figure out how to have the nullobject pattern without this
       self.winner = winner
-      Participation.set_points(self)
+      participations.find_by(user: winner).update_attribute(:points, 1)
     end
     update_column(:over, true)
   end

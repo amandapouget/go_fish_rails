@@ -10,10 +10,6 @@ class User < ActiveRecord::Base
   end
 
   def points
-    total = 0
-    Participation.find do |participation|
-      total += participation.points if participation.user.id == self.id # the death trap of STI
-    end
-    total
+    self.participations.sum(:points)
   end
 end
