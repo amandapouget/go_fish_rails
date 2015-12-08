@@ -12,14 +12,6 @@ describe RealUser do
     expect(RealUser.new.save).to be false
   end
 
-  it 'stores the last known client socket connection' do
-    expect(real_user.client).to be nil
-  end
-
-  it 'returns the right user when given just an id' do
-    expect(User.find(real_user.id)).to eq real_user
-  end
-
   describe 'be a part of matches' do
     let(:match) { create(:match, users: [real_user, real_user2]) }
     let(:match2) { create(:match, users: [real_user, real_user2]) }
@@ -29,3 +21,8 @@ describe RealUser do
     end
   end
 end
+
+# Ken's code for saving a TCP socket...
+# it 'stores the last known client socket connection' do
+#   expect(real_user.client).to be nil
+# end

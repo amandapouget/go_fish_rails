@@ -4,11 +4,6 @@ class User < ActiveRecord::Base
   has_many :participations
   has_many :matches, :through => :participations
 
-  def current_match
-    unfinished_matches = matches.select { |match| match.over? == false }
-    unfinished_matches.sort_by { |match| match.updated_at }.last
-  end
-
   def points
     self.participations.sum(:points)
   end

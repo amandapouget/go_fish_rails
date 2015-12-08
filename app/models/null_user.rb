@@ -1,5 +1,5 @@
 class NullUser
-  attr_accessor :matches, :name, :client
+  attr_accessor :matches, :name, :id
 
   def initialize
     @name = "none"
@@ -7,12 +7,6 @@ class NullUser
   end
 
   def save
-  end
-
-  def current_match
-  end
-
-  def id
   end
 
   def update_attribute

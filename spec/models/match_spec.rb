@@ -55,14 +55,6 @@ describe Match do
     expect(match.game.deck.count_cards).to eq match.game.deck.count_cards
   end
 
-  it 'can find a player when given a name' do
-    expect(match.player_from_name(players[0].name)).to eq players[0]
-  end
-
-  it 'returns a nullplayer if it cant find such a player' do
-    expect(match.player_from_name("not_a_name")).to be_a NullPlayer
-  end
-
   it 'gives me the game from one player point of view' do
     players[0].add_card(build(:card))
     players[0].books = build(:book)

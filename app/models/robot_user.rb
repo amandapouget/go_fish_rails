@@ -14,7 +14,7 @@ class RobotUser < User
   end
 
   def player
-    (@match || current_match).player(self)
+    (@match || matches.last).player(self)
   end
 
 protected
