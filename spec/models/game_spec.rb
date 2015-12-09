@@ -40,7 +40,6 @@ describe Game do
     let(:game) { build(:game, num_players: 2) }
     let(:player0) { game.players[0] }
     let(:player1) { game.players[1] }
-    let(:null_player) { build(:null_player) }
 
     after do
       player0.cards = []
@@ -67,7 +66,9 @@ describe Game do
     end
 
     describe '#winner' do
-      it 'returns a nullplayer if the game has not started, is not over, or in the event of a tie' do
+      let(:null_player) { build(:null_player) }
+
+      it 'returns a NullPlayer if the game has not started, is not over, or in the event of a tie' do
         expect(game.winner).to eq null_player
         game.deal
         expect(game.winner).to eq null_player

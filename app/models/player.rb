@@ -61,27 +61,10 @@ private
 end
 
 class NullPlayer < Player
-  attr_accessor :name, :cards, :books, :id
+  attr_reader :id
 
-  def initialize
-    @name = "none"
-    @cards = []
-    @books = []
-  end
-
-  def give_cards(rank)
-  end
-
-  def request_cards(player, rank)
-  end
-
-  def collect_winnings(cards)
-  end
-
-  def go_fish(deck)
-  end
-
-  def add_card(card)
+  def name
+    "none"
   end
 
   def eql?(player)

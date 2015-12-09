@@ -26,11 +26,11 @@ class Match < ActiveRecord::Base
   end
 
   def user(player)
-    User.find_by_id(player.id) || NullUser.new
+    User.find_by_id(player.id)
   end
 
   def player(user)
-    players.find { |player| player.id == user.id } || NullPlayer.new
+    players.find { |player| player.id == user.id }
   end
 
   def opponents(player)
@@ -74,12 +74,8 @@ class Match < ActiveRecord::Base
     end
   end
 
-  def winning_user
-    user(game.winner) unless game.winner.is_a? NullPlayer
-  end
-
   def end_match
-    self.winner = winning_user
+    self.winner = user(game.winner)
     participations.where(user: winner).each {|participation| participation.update_attribute(:points, 1)}
     update_column(:over, true)
   end

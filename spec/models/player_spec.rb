@@ -131,44 +131,18 @@ describe Player do
     end
 
     describe NullPlayer do
-      let(:nullplayer) { build(:null_player) }
-      let(:nullplayer2) { build(:null_player) }
+      let(:null_player) { build(:null_player) }
+      let(:null_player2) { build(:null_player) }
 
-      it 'returns none when its name is called' do
-        expect(nullplayer.name).to eq "none"
+      it 'has a name and id stub to smooth some functionality in Game and Match' do
+        expect { null_player.name }.not_to raise_exception
+        expect { null_player.id }.not_to raise_exception
       end
 
-      it 'returns an empty array when its cards are called' do
-        expect(nullplayer.cards).to eq []
-      end
-
-      it 'does not raise an exception when the regular player methods are called' do
-        expect { nullplayer.give_cards("two") }.to_not raise_exception
-        expect { nullplayer.request_cards(player, "ten") }.to_not raise_exception
-        expect { nullplayer.collect_winnings([card_3c]) }.to_not raise_exception
-        expect { nullplayer.go_fish(deck) }.to_not raise_exception
-        expect { nullplayer.add_card(card_3c) }.to_not raise_exception
-        expect { nullplayer.icon }.to_not raise_exception
-      end
-
-      it 'returns 0 when its cards are counted' do
-        expect(nullplayer.count_cards).to eq 0
-      end
-
-      it 'returns true when asked if it is out of cards' do
-        expect(nullplayer.out_of_cards?).to be true
-      end
-
-      it 'calls all nullplayer objects equal if comparing two nullplayers' do
-        expect(nullplayer == nullplayer2).to be true
-        expect(nullplayer.eql?(nullplayer2)).to be true
-        expect(nullplayer.hash == nullplayer2.hash).to be true
-      end
-
-      it 'returns false if comparing the equality of a nullplayer with a player' do
-        expect(nullplayer == player).to be false
-        expect(nullplayer.eql?(player)).to be false
-        expect(nullplayer.hash == player.hash).to be false
+      it 'calls eql two NullPlayers' do
+        expect(null_player == null_player2).to be true
+        expect(null_player.eql?(null_player2)).to be true
+        expect(null_player.hash).to eq null_player2.hash
       end
     end
   end

@@ -34,9 +34,9 @@ describe Match do
     expect(found_user.name).to eq player.name
   end
 
-  it 'returns a nullobject when searching for a player or user that is not part of this match' do
-    expect(match.user(build(:player))).to eq build(:null_user)
-    expect(match.player(create(:real_user))).to eq build(:null_player)
+  it 'returns nil when searching for a player or user that is not part of this match' do
+    expect(match.user(build(:player))).to be nil
+    expect(match.player(create(:real_user))).to be nil
   end
 
   it 'can tell you a players opponents' do
@@ -134,29 +134,25 @@ describe Match do
     end
   end
 
-  it 'can end itself' do
-    match.end_match
-    expect(match.over).to be true
-  end
+  describe 'ending a match' do
+    let(:user) { users[0] }
 
-  it 'can tell you if it has been ended' do
-    expect(match.over).to be false
-    match.end_match
-    expect(match.over).to be true
-  end
+    before do
+      allow(match.game).to receive(:winner).and_return(match.player(user))
+    end
 
-  it 'can tell you who won the game' do
-    user = users[0]
-    match.game.winner = match.player(user)
-    match.end_match
-    expect(match.winner).to eq user
-  end
+    it 'can tell you if it has been ended' do
+      match.end_match
+      expect(match.over).to be true
+    end
 
-  it 'adds points to the winner' do
-    user = users[0]
-    old_point_total = user.points
-    match.game.winner = match.player(user)
-    match.end_match
-    expect(user.points).to be > old_point_total
+    it 'can tell you who won the game' do
+      match.end_match
+      expect(match.winner).to eq user
+    end
+
+    it 'adds points to the winner' do
+      expect { match.end_match }.to change { user.points }
+    end
   end
 end

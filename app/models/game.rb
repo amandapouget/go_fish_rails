@@ -22,7 +22,7 @@ class Game
   end
 
   def winner
-    @winner ||= game_over? ? player_with_most_books : NullPlayer.new
+    game_over? ? player_with_most_books : NullPlayer.new
   end
 
   def player_with_most_books
