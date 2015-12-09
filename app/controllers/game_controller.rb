@@ -9,30 +9,29 @@ class GameController < ApplicationController
   end
 
   def wait
-    @user = RealUser.create(name: params["name"])
     @num_players = params["num_players"].to_i
-    match = match_maker.match(@user, @num_players)
-    start(match) if match
+    match_maker.match(current_user, @num_players)
   end
 
   def subscribed
-    user = User.find(params["id"].to_i)
-    match = user.matches.sort_by { |match| match.created_at }.last
+    match = match_maker.start_match(current_user) || newest_match
     match.users.each { |user| push(match, user) } if match
     render json: nil, status: :ok
   end
 
-  def start_with_robots
-    user = User.find(params["id"].to_i)
+  def start_with_robots # how can I refactor this and make it shorter?
     num_players = params["num_players"].to_i
-    match = match_maker.match(RobotUser.new, num_players) until match
-    start(match)
-    redirect_to "/#{match.id}/player/#{user.id}"
+    match = nil
+    until match
+      match_maker.match(FactoryGirl.create(:robot_user), num_players) # can't figure out how to do regular create! fails.
+      match = match_maker.start_match(current_user)
+    end
+    redirect_to "/#{match.id}/player/#{current_user.id}"
   end
 
   def show
-    @match = Match.find_by_id(params["match_id"].to_i)
-    @player = @match.players.find { |player| player.id == params["id"].to_i } if @match
+    @match = match
+    @player = @match.players(current_user) if @match
     if @player && params['format'] == 'json'
       render json: @match.view(@player)
     elsif @player
@@ -54,12 +53,11 @@ class GameController < ApplicationController
     @@match_maker ||= MatchMaker.new
   end
 
-  protected
-    def start(match)
-      match.game.deal
-      match.save
-    end
+  def newest_match
+    current_user.matches.sort_by { |match| match.created_at }.last unless match_maker.is_holding(current_user)
+  end
 
+protected
     def push(match, user)
       Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "#{match.id}/player/#{user.id}" })
     end
