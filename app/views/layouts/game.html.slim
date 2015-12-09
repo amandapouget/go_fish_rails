@@ -1,7 +1,36 @@
-header
-  h1 Go Fish
-main class='game'
-  == yield
-br
-footer
-  a href='/' class='button' Home
+doctype html
+html
+  head
+    title Go Fish
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    link rel="stylesheet" type="text/css" href="/assets/game.css"
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'
+    link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'
+    script src="https://js.pusher.com/3.0/pusher.min.js" type="text/javascript"
+  body
+    header
+      p class="profile_nav"
+        - if user_signed_in?
+          b = current_user.email
+          |  
+          = link_to 'Edit profile', edit_user_registration_path, :class => 'link'
+          |  | 
+          = link_to 'Logout', destroy_user_session_path, method: :delete, :class => 'link'
+        - else
+          = link_to 'Sign up', new_user_registration_path, :class => 'link'
+          |  | 
+          = link_to 'Login', new_user_session_path, :class => 'link'
+      h1 Go Fish
+    main class='game'
+      - if notice
+        p class="alert alert-success" = notice
+      - if alert
+        p class="alert alert-danger" = alert
+      == yield
+    br
+    footer
+      a href='/' class='button' Home
+      br
