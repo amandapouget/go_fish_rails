@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe User do
+RSpec.describe User, type: :model do
   let(:user) { create(:real_user) }
   let(:match) { create(:match, users: [user, create(:robot_user)]) }
   let(:match2) { create(:match, users: [user, create(:robot_user)]) }

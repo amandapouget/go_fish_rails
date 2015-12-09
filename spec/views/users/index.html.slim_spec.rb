@@ -5,12 +5,12 @@ RSpec.describe "users/index", type: :view do
     assign(:users, [
       User.create!(
         :name => "Name",
-        :type => "MyText",
+        :type => "RealUser",
         :think_time => 1
       ),
       User.create!(
         :name => "Name",
-        :type => "MyText",
+        :type => "RealUser",
         :think_time => 1
       )
     ])

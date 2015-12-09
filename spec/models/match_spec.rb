@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Match do
+RSpec.describe Match, type: :model do
   let(:match) { create(:match, num_players: Game::MAX_PLAYERS) }
   let(:match_from_database) { Match.find_by_id(match.id) }
   let(:players ) { match.players }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Participation do
+RSpec.describe Participation, type: :model do
   let(:user) { create(:real_user) }
   let(:match) { create(:match, users: [user, create(:real_user)]) }
   let(:participation) { Participation.find_by(match: match, user: user) }

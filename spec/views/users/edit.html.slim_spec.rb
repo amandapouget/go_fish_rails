@@ -4,7 +4,7 @@ RSpec.describe "users/edit", type: :view do
   before(:each) do
     @user = assign(:user, User.create!(
       :name => "MyString",
-      :type => "MyText",
+      :type => "RealUser",
       :think_time => 1
     ))
   end

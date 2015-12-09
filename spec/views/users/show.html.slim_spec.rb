@@ -4,7 +4,7 @@ RSpec.describe "users/show", type: :view do
   before(:each) do
     @user = assign(:user, User.create!(
       :name => "Name",
-      :type => "MyText",
+      :type => "RealUser",
       :think_time => 1
     ))
   end
