@@ -23,7 +23,7 @@ class GameController < ApplicationController
     num_players = params["num_players"].to_i
     match = nil
     until match
-      match_maker.match(FactoryGirl.create(:robot_user), num_players) # can't figure out how to do regular create! fails.
+      match_maker.match(RobotUser.create!, num_players) # can't figure out how to do regular create! fails.
       match = match_maker.start_match(current_user)
     end
     redirect_to "/#{match.id}/player/#{current_user.id}"

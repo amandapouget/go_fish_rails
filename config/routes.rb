@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, class_name: 'RealUser'
   resources :participations
   resources :users
   resources :matches

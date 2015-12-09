@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe GameController, type: :controller do
-  let(:current_user) { FactoryGirl.create(:user) }
+  let(:current_user) { FactoryGirl.create(:real_user) }
 
   before do
     controller.match_maker.reset
-    @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in current_user
   end
 
