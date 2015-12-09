@@ -17,14 +17,14 @@ class GameController < ApplicationController
   end
 
   def subscribed
-    user = User.find(params["user_id"].to_i)
+    user = User.find(params["id"].to_i)
     match = user.matches.sort_by { |match| match.created_at }.last
     match.users.each { |user| push(match, user) } if match
     render json: nil, status: :ok
   end
 
   def start_with_robots
-    user = User.find(params["user_id"].to_i)
+    user = User.find(params["id"].to_i)
     num_players = params["num_players"].to_i
     match = match_maker.match(RobotUser.new, num_players) until match
     start(match)
