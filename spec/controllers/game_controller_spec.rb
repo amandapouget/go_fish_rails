@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe GameController, type: :controller do
+  before do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in FactoryGirl.create(:user)
+  end
+
   describe 'GET #index' do
     it 'assigns @player_range based on allowed range from Game model' do
       get :index, {}

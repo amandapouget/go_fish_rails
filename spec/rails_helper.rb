@@ -10,6 +10,7 @@ require 'capybara/rails'
 require 'pry-byebug'
 require 'socket'
 require 'factory_girl_rails'
+require 'devise'
 
 Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
 
@@ -20,7 +21,6 @@ RSpec.configure do |config|
     User.destroy_all
     Participation.destroy_all
   end
-  # ActiveRecord::Base.add_observer MatchClientNotifier.instance
 end
 
 
@@ -71,4 +71,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # Devise needs this
+  config.include Devise::TestHelpers, type: :controller
 end

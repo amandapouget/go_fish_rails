@@ -3,7 +3,6 @@ require 'pry'
 
 class GameController < ApplicationController
   Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
-  # extract to Pusher class
 
   def index
     @player_range = Game::PLAYER_RANGE
