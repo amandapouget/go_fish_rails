@@ -55,10 +55,10 @@ RSpec.describe Match, type: :model do
     expect(match.game.deck.count_cards).to eq match.game.deck.count_cards
   end
 
-  it 'gives me the game from one player point of view' do
+  it 'gives me the game from one user point of view' do
     players[0].add_card(build(:card))
     players[0].books = build(:book)
-    view = JSON.parse(match.view(players[0]))
+    view = JSON.parse(match.view(match.user(players[0])))
     expect(view["message"]).to eq match.message
     expect(view["player"]).to eq JSON.parse(players[0].to_json)
     expect(view["player_index"]).to eq 0

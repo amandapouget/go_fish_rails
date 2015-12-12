@@ -37,7 +37,8 @@ class Match < ActiveRecord::Base
     players.clone.tap { |players| players.rotate!(players.index{ |available_player| available_player.id == player.id}).shift }
   end
 
-  def view(player)
+  def view(user)
+    player = player(user)
     return {
       message: self.message,
       player: player,
