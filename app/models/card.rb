@@ -16,8 +16,7 @@ class Card
   end
 
   def rank_value
-    return RANKS.index(@rank) + 2 if RANKS.include?(@rank)
-    return 0
+    RANKS.include?(@rank) ? (RANKS.index(@rank) + 2) : 0
   end
 
   def eql?(another_card)
