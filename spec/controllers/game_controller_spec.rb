@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GameController, type: :controller do
-  let(:current_user) { FactoryGirl.create(:real_user) }
+  let(:current_user) { create(:real_user) }
 
   before do
     controller.match_maker.reset
@@ -29,8 +29,8 @@ RSpec.describe GameController, type: :controller do
       }.not_to change(Match, :count)
     end
 
-    it 'returns nil' do
-      response = post :subscribed
+    it 'returns a success message' do
+      post :subscribed
       expect(response).to be_success
     end
 
@@ -45,7 +45,7 @@ RSpec.describe GameController, type: :controller do
 
       it 'readies the match for play by dealing the cards if it creates a match' do
         post :subscribed
-        expect(controller.newest_match.game.game_over?).to be false
+        expect(controller.newly_created_match.game.game_over?).to be false
       end
 
       it 'triggers a push' do
@@ -74,8 +74,7 @@ RSpec.describe GameController, type: :controller do
 
     it 'it creates a match with the user and some robots' do
       post :start_with_robots, { num_players: Game::MIN_PLAYERS }
-      match = controller.newest_match
-      expect(match).not_to be nil
+      match = controller.newly_created_match
       expect(match.users).to include current_user
       expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
     end
@@ -84,14 +83,58 @@ RSpec.describe GameController, type: :controller do
       post :start_with_robots, { num_players: Game::MIN_PLAYERS }
       expect(response).to redirect_to /.[0-9]\/player\/.[0-9]/
     end
-
-
   end
 
   describe 'GET #show' do
+    let(:match) { create(:match, users: [current_user, create(:robot_user)]) }
+    let(:match_without_current_user) { create(:match) }
+    let(:get_show) { get :show, { match_id: match.id } }
+    let(:get_show_json) { get :show, format: :json, match_id: match.id }
+    let(:get_no_show) { get :show, { match_id: match_without_current_user.id } }
+
+    it 'assigns the match as @match' do
+      get_show
+      expect(assigns(:match)).to eq match
+    end
+
+    it 'assigns from the match the player for the current_user as @player' do
+      get_show
+      expect(match.user(assigns(:player))).to eq current_user
+    end
+
+    it 'returns the show view if @player' do
+      expect(get_show).to render_template(:show)
+    end
+
+    it 'returns the no_show view if no @player is found' do
+      expect(get_no_show).to render_template(:no_show)
+    end
+
+    it 'returns a json-ified @match.view(player) if format is json' do
+      get_show_json
+      expect(response.body).to include match.view(current_user)
+    end
+    # will probably need to account for json-no-show case for api
   end
 
   describe 'POST #card_request' do
+    let(:opponent) { create(:robot_user) }
+    let(:match) { create(:match, :dealt, users: [current_user, opponent]) }
+    let(:post_card_request) { post :card_request, matchId: match.id }
+    let(:cards) { match.player(current_user).cards }
+
+    before do
+      post :card_request, matchId: match.id, opponentUserId: opponent.id, rank: cards.sample.rank
+    end
+
+    it 'causes game play to happen' do
+      match.reload
+      expect(match.player(current_user).cards).not_to eq cards
+    end
+
+    it 'returns a success message' do
+      expect(response).to be_success
+    end
   end
 
   # User/new

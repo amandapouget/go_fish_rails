@@ -10,6 +10,7 @@ FactoryGirl.define do
   end
 
   factory :robot_user do
+    email
     think_time 0
   end
 end

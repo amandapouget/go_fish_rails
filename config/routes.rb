@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   root 'game#index'
   post '/wait' => 'game#wait'
   post '/subscribed' => 'game#subscribed'
-  post 'start_with_robots' => 'game#start_with_robots'
-  get '/:match_id/player/:id' => 'game#show'
+  post '/start_with_robots' => 'game#start_with_robots'
+  get '/:match_id/player' => 'game#show'
   post '/card_request' => 'game#card_request'
 
   # The priority is based upon order of creation: first created -> highest priority.
