@@ -34,6 +34,24 @@ RSpec.describe GameController, type: :controller do
       expect(response).to be_success
     end
 
+    def expect_to_trigger_push
+      allow(controller).to receive(:push).and_return nil
+      expect(controller).to receive(:push)
+      post :subscribed
+    end
+
+    it 'triggers a push when enough users subscribe' do
+      Game::MIN_PLAYERS.times { post :wait, { num_players: Game::MIN_PLAYERS } }
+      Game::MIN_PLAYERS.times { expect_to_trigger_push }
+    end
+
+    it 'triggers a push when enough users subscribe, but in a different order (timing issue)' do
+      Game::MIN_PLAYERS.times do
+        post :wait, { num_players: Game::MIN_PLAYERS }
+        expect_to_trigger_push
+      end
+    end
+
     context 'enough users have joined' do
       before do
         Game::MIN_PLAYERS.times { post :wait, { num_players: Game::MIN_PLAYERS } }
@@ -47,50 +65,31 @@ RSpec.describe GameController, type: :controller do
         post :subscribed
         expect(controller.newly_created_match.game.game_over?).to be false
       end
-
-      it 'triggers a push' do
-        Game::MIN_PLAYERS.times do
-          allow(controller).to receive(:push).and_return nil
-          expect(controller).to receive(:push)
-          post :subscribed
-        end
-      end
-    end
-
-    it 'triggers a push when the enough users subscribe in a different order' do
-      Game::MIN_PLAYERS.times do
-        post :wait, { num_players: Game::MIN_PLAYERS }
-        allow(controller).to receive(:push).and_return nil
-        expect(controller).to receive(:push)
-        post :subscribed
-      end
     end
   end
 
   describe 'POST #start_with_robots' do
     before do
       post :wait, { num_players: Game::MIN_PLAYERS }
+      post :start_with_robots, { num_players: Game::MIN_PLAYERS }
     end
 
     it 'it creates a match with the user and some robots' do
-      post :start_with_robots, { num_players: Game::MIN_PLAYERS }
       match = controller.newly_created_match
       expect(match.users).to include current_user
       expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
     end
 
     it 'redirects to the match page' do
-      post :start_with_robots, { num_players: Game::MIN_PLAYERS }
       expect(response).to redirect_to /.[0-9]\/player\/.[0-9]/
     end
   end
 
   describe 'GET #show' do
     let(:match) { create(:match, users: [current_user, create(:robot_user)]) }
-    let(:match_without_current_user) { create(:match) }
     let(:get_show) { get :show, { match_id: match.id } }
     let(:get_show_json) { get :show, format: :json, match_id: match.id }
-    let(:get_no_show) { get :show, { match_id: match_without_current_user.id } }
+    let(:get_no_show) { get :show, { match_id: create(:match).id } }
 
     it 'assigns the match as @match' do
       get_show
