@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :users
   resources :matches
   root 'game#index'
+  get '/index' => 'game#index'
   post '/wait' => 'game#wait'
   post '/subscribed' => 'game#subscribed'
   post '/start_with_robots' => 'game#start_with_robots'

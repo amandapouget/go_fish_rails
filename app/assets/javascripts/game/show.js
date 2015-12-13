@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  if (document.getElementById('data-marker').getAttribute('data-page') === "game/show") {
+  if (document.body.contains(document.getElementById('data-maker')) && document.getElementById('data-marker').getAttribute('data-page') === "game/show") {
     function PlayerView(matchId, userId) {
       this.matchId = matchId;
       this.userId = userId;

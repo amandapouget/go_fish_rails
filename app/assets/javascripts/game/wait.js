@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  if (document.getElementById('data-marker').getAttribute('data-page') === "game/wait") {
+  if (document.body.contains(document.getElementById('data-maker')) && document.getElementById('data-marker').getAttribute('data-page') === "game/wait") {
     function WaitingView() {
     }
 

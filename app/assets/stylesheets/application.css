@@ -1,15 +1,138 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
  *= require_tree .
  *= require_self
  */
+
+ body {
+   background-color: #0f2a4c;
+   color: white;
+   padding: 5px;
+   font-size: 1.5em;
+   font-family: 'Lato';
+ }
+
+ header {
+   width: 100%;
+ }
+
+ .profile_nav a {
+     color: #800020;
+     text-decoration: underline;
+     cursor: auto;
+ }
+
+ .profile_nav {
+   text-align: right;
+   margin: 0 auto;
+ }
+
+  h1 {
+    color: #FFFDD0;
+    text-align: center;
+    font-family: 'Rock Salt', cursive;
+    font-size: 3em;
+    margin: 0 auto;
+    line-height: 130px;
+  }
+
+  h2 {
+    -webkit-margin-before: 0.1em;
+    -webkit-margin-after: 0.1em;
+    color: #FFFDD0;
+    text-align: center;
+    font-family: 'Rock Salt', cursive;
+    font-size: 2em;
+    line-height: 80px;
+    margin: 10px;
+  }
+
+  h4 {
+    margin: 0 0 10px 0;
+  }
+
+  input, .main a {
+    margin: 10px;
+    border:5px solid #FFFDD0;
+    border-radius: 8px;
+    font-size: 1em;
+    color: white;
+    font-family: 'Lato';
+    background: #003366;
+    padding: 5px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 5px 10px;
+    border: solid;
+    border-radius: 8px;
+    border-color: #654321;
+    background-color: #FFFDD0;
+    font-size: 1em;
+    font-family: 'Lato';
+    color: #654321;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .main {
+    border: 5px solid #FFFDD0;
+    border-radius: 25px;
+    background-color: #654321;
+    padding: 5px 5px 5px 5px;
+    margin: auto;
+    width: 80%;
+    text-align: center;
+  }
+
+  footer {
+    width: 100%;
+    text-align: center;
+  }
+
+ .radio-buttons {
+   list-style-type:none;
+   margin: 25px 0px;
+   padding: 0;
+ }
+
+ .radio-buttons li {
+   display: inline-block;
+   margin: 0px 10px;
+   width:100px;
+   height: 50px;
+   position: relative;
+ }
+
+ .radio-buttons label, .radio-buttons input {
+   display:block;
+   position: absolute;
+   top:0;
+   left:0;
+   right:0;
+   bottom:0;
+ }
+
+ .radio-buttons input[type="radio"] {
+   opacity:0.011;
+   z-index:100;
+ }
+
+ .radio-buttons input[type="radio"]:checked + label {
+   background: #003366;
+ }
+
+ .radio-buttons label {
+   padding:5px;
+   border:5px solid #FFFDD0;
+   border-radius: 8px;
+   cursor: pointer;
+   z-index:90;
+ }
+
+ .radio-buttons label:hover {
+   background: #3f2a14;
+ }
