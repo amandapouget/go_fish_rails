@@ -1,8 +1,7 @@
 $(document).ready(function() {
-  if (document.body.contains(document.getElementById('data-maker')) && document.getElementById('data-marker').getAttribute('data-page') === "game/show") {
-    function PlayerView(matchId, userId) {
+  if (document.body.contains(document.getElementById('data-marker')) && document.getElementById('data-marker').getAttribute('data-page') === "matches/show") {
+    function PlayerView(matchId) {
       this.matchId = matchId;
-      this.userId = userId;
       this.listenForRankRequest();
     }
 
@@ -20,8 +19,14 @@ $(document).ready(function() {
       var object = this;
       $('#fish_blue').click(function(){
         if (object.rank && object.opponentUserId) {
-          $.post('/card_request', { matchId: object.matchId, playerUserId: object.userId, opponentUserId: object.opponentUserId, rank: object.rank }).success(function()  {
-            console.log('Card request info sent!');
+          $.ajax({
+            url: '/matches/' + object.matchId + '.json',
+            type: 'PUT',
+            dataType: 'json',
+            data: { opponentUserId: object.opponentUserId, rank: object.rank },
+            success: function() {
+              console.log('Match update sent!')
+            }
           });
         }
       }.bind(this));
@@ -117,7 +122,7 @@ $(document).ready(function() {
 
     PlayerView.prototype.refresh = function() {
       $.ajax({
-         url: '/' + this.matchId + '/player/' + this.userId + '.json',
+         url: '/matches/' + this.matchId + '.json',
          dataType: 'json',
          complete: function(gameInfo){
          },
@@ -135,9 +140,8 @@ $(document).ready(function() {
 
     var documentIsReady = function() {
       var readyTracker = new ReadyTracker();
-      var matchId = window.location.pathname.split('/')[1];
-      var userId = window.location.pathname.split('/')[3];
-      var playerView = new PlayerView(matchId, userId);
+      var matchId = window.location.pathname.split('/')[2];
+      var playerView = new PlayerView(matchId);
       var pusher = new Pusher('39cc3ae7664f69e97e12', { encrypted: true });
       var channel = pusher.subscribe('game_play_channel_' + playerView.matchId);
       channel.bind('pusher:subscription_succeeded', function() {

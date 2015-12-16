@@ -6,16 +6,11 @@
         - @match.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :over
-    = f.check_box :over
-  .field
-    = f.label :message
-    = f.text_area :message
-  .field
-    = f.label :hand_size
-    = f.number_field :hand_size
-  .field
-    = f.label :game
-    = f.text_area :game
+  = f.label 'Players in your game'
+  br
+  ul class='radio-buttons' id='radio_buttons'
+    - @player_range.each do |num_players|
+      li: input required=true type='radio' id="#{num_players}" value="#{num_players}" name='num_players'
+        label for="#{num_players}" #{num_players}
+  br
   .actions = f.submit

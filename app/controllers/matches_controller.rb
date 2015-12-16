@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-  before_action :set_match, only: [:show, :edit, :update, :destroy]
+  before_action :set_match, only: [:show, :update]
 
   # GET /matches
   # GET /matches.json
@@ -10,55 +10,57 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
+    @player = @match.player(current_user) if @match
+    respond_to do |format|
+      format.html { @player ? (render :show) : (render :no_show) }
+      format.json { render json: @match.view(current_user) }
+    end
   end
 
   # GET /matches/new
   def new
-    @match = Match.new
-  end
-
-  # GET /matches/1/edit
-  def edit
+    @player_range = Game::PLAYER_RANGE
   end
 
   # POST /matches
   # POST /matches.json
   def create
-    @match = Match.new(match_params)
+    @num_players = params["num_players"].to_i
+    match_maker.match(current_user, @num_players)
+  end
 
-    respond_to do |format|
-      if @match.save
-        format.html { redirect_to @match, notice: 'Match was successfully created.' }
-        format.json { render :show, status: :created, location: @match }
-      else
-        format.html { render :new }
-        format.json { render json: @match.errors, status: :unprocessable_entity }
-      end
-    end
+  def subscribed
+    match = match_maker.start_match(current_user) || newly_created_match
+    match.users.each { |user| push(match, user) } if match
+    return_success
+  end
+
+  def start_with_robots
+    num_players = params["num_players"].to_i
+    match = start_robot_match(num_players) until match
+    redirect_to "/matches/#{match.id}"
   end
 
   # PATCH/PUT /matches/1
   # PATCH/PUT /matches/1.json
-  def update
-    respond_to do |format|
-      if @match.update(match_params)
-        format.html { redirect_to @match, notice: 'Match was successfully updated.' }
-        format.json { render :show, status: :ok, location: @match }
-      else
-        format.html { render :edit }
-        format.json { render json: @match.errors, status: :unprocessable_entity }
-      end
-    end
+  def update # don't understand why I don't have an authenticity_token problem here!!!
+    opponent = @match.player(User.find(params["opponentUserId"].to_i))
+    @match.run_play(@match.player(current_user), opponent, params["rank"])
+    return_success
   end
 
-  # DELETE /matches/1
-  # DELETE /matches/1.json
-  def destroy
-    @match.destroy
-    respond_to do |format|
-      format.html { redirect_to matches_url, notice: 'Match was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+  def match_maker
+    @@match_maker ||= MatchMaker.new
+  end
+
+  def newly_created_match
+    current_user.matches.sort_by { |match| match.created_at }.last unless match_maker.is_holding(current_user)
+  end
+
+  def simulate_start
+    match = FactoryGirl.create(:match)
+    match.game.deal
+    render json: match.view(match.users[0])
   end
 
   private
@@ -67,8 +69,16 @@ class MatchesController < ApplicationController
       @match = Match.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def match_params
-      params.require(:match).permit(:over, :message, :hand_size, :game)
+    def start_robot_match(num_players)
+      match_maker.match(RobotUser.create, num_players)
+      match_maker.start_match(current_user)
+    end
+
+    def push(match, user)
+      Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "/matches/#{match.id}" })
+    end
+
+    def return_success
+      render json: nil, status: :ok
     end
 end

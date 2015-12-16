@@ -15,10 +15,6 @@ RSpec.describe MatchesController, type: :routing do
       expect(:get => "/matches/1").to route_to("matches#show", :id => "1")
     end
 
-    it "routes to #edit" do
-      expect(:get => "/matches/1/edit").to route_to("matches#edit", :id => "1")
-    end
-
     it "routes to #create" do
       expect(:post => "/matches").to route_to("matches#create")
     end
@@ -31,9 +27,12 @@ RSpec.describe MatchesController, type: :routing do
       expect(:patch => "/matches/1").to route_to("matches#update", :id => "1")
     end
 
-    it "routes to #destroy" do
-      expect(:delete => "/matches/1").to route_to("matches#destroy", :id => "1")
+    it "routes to #start_with_robots via POST" do
+      expect(:post => "/start_with_robots").to route_to("matches#start_with_robots", :num_players => "2")
     end
 
+    it "routes to subscribed via POST" do
+      expect(:post => "/subscribed").to route_to("matches#subscribed")
+    end
   end
 end

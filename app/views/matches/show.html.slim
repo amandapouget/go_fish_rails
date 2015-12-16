@@ -1,18 +1,13 @@
-p#notice = notice
-
-p
-  strong Over:
-  = @match.over
-p
-  strong Message:
-  = @match.message
-p
-  strong Hand size:
-  = @match.hand_size
-p
-  strong Game:
-  = @match.game
-
-= link_to 'Edit', edit_match_path(@match)
-'|
-= link_to 'Back', matches_path
+div id="data-marker" data-page="matches/show"
+div class="opponents" id="opponents"
+div class="pond"
+  div id="speech"
+    div id="message"
+  div id="fish_blue"
+div class="info-for-player"
+  div class="score" id="books"
+    h4 Your Books
+  div class="player" id="player"
+  div class="score" id="score_header"
+    h4 Score
+    div class="score" id="scores"

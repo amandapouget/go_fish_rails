@@ -2,14 +2,12 @@ Rails.application.routes.draw do
   devise_for :users, class_name: 'RealUser', :controllers => {:registrations => "registrations"}
   resources :participations
   resources :users
-  resources :matches
-  root 'game#index'
-  get '/index' => 'game#index'
-  post '/wait' => 'game#wait'
-  post '/subscribed' => 'game#subscribed'
-  post '/start_with_robots' => 'game#start_with_robots'
-  get '/:match_id/player' => 'game#show'
-  post '/card_request' => 'game#card_request'
+  resources :matches, except: [:edit, :destroy]
+  post '/start_with_robots' => 'matches#start_with_robots'
+  post '/subscribed' => 'matches#subscribed'
+
+  root 'matches#new'
+  get '/simulate_start' => 'matches#simulate_start'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

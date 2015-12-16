@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  if (document.body.contains(document.getElementById('data-maker')) && document.getElementById('data-marker').getAttribute('data-page') === "game/wait") {
+  if (document.body.contains(document.getElementById('data-marker')) && document.getElementById('data-marker').getAttribute('data-page') === "matches/create") {
     function WaitingView() {
     }
 
@@ -19,7 +19,6 @@ $(document).ready(function() {
       var numberOfPlayers = $("#game_info").data("num_players");
       var waitingView = new WaitingView();
       var channel = pusher.subscribe('waiting_for_players_channel_' + userId);
-
       channel.bind('pusher:subscription_succeeded', function() {
         $.post('/subscribed', { id: userId, num_players: numberOfPlayers });
         waitingView.setPlayWithRobots();

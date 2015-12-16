@@ -1,4 +1,18 @@
 require 'rails_helper'
+
+# it 'creates a new User' do
+#   expect {
+#     post :wait, { name: "Amanda", num_players: Game::MIN_PLAYERS }
+#   }.to change(User, :count).by(1)
+# end
+
+# User/new -- need to test Devise? :-)
+# it 'assigns a newly created user as current_user' do
+#   post :wait, { name: "Amanda", num_players: Game::MIN_PLAYERS }
+#   expect(assigns(:user)).to be_a(User)
+#   expect(assigns(:user)).to be_persisted
+# end
+
 RSpec.describe UsersController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to

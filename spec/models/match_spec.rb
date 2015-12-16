@@ -83,7 +83,7 @@ RSpec.describe Match, type: :model do
       match.run_play(players[0], players[1], "ace")
       expect(players[0].cards).to match_array [card_as, card_ah]
       expect(players[1].cards).to match_array [card_2h]
-      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces & got cards! It's #{players[0].name}'s turn!"
+      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces and got cards! It's #{players[0].name}'s turn!"
     end
 
     it 'works when a player does not win cards, goes fish, and gets the card he was looking for' do
@@ -92,7 +92,7 @@ RSpec.describe Match, type: :model do
       match.run_play(players[0], players[1], "ace")
       expect(players[0].cards).to match_array [card_as, card_ah]
       expect(players[1].cards).to match_array [card_2h]
-      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces & went fish & got one! It's #{players[0].name}'s turn!"
+      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces and went fish and got one! It's #{players[0].name}'s turn!"
     end
 
     it 'works when a player does not win cards or get the right card in go fish' do
@@ -101,7 +101,7 @@ RSpec.describe Match, type: :model do
       match.run_play(players[0], players[1], "ace")
       expect(players[0].cards).to match_array [card_as, card_2d]
       expect(players[1].cards).to match_array [card_2h]
-      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces & went fish! It's #{players[1].name}'s turn!"
+      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for aces and went fish! It's #{players[1].name}'s turn!"
     end
 
     it 'works when the game is over as a result' do
@@ -109,7 +109,7 @@ RSpec.describe Match, type: :model do
       match.run_play(players[0], players[1], "two")
       expect(players[0].cards).to match_array [card_2d, card_2h]
       expect(players[1].cards).to match_array []
-      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for twos & got cards! Game over! Winner: none"
+      expect(match.message).to eq "#{players[0].name} asked #{players[1].name} for twos and got cards! Game over! Winner: none"
       expect(match.over).to be true
     end
   end

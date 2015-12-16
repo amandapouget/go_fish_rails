@@ -5,7 +5,7 @@ class Match < ActiveRecord::Base
   serialize :game
   after_create :set_defaults, :save
 
-  FIRST_PROMPT = ", click card, player & me to request cards!"
+  FIRST_PROMPT = ", click card, player and me to request cards!"
 
   def set_defaults
     self.game ||= Game.new(players: self.users.map { |user| Player.new(name: user.name, id: user.id) }, hand_size: self.hand_size)
@@ -60,12 +60,12 @@ class Match < ActiveRecord::Base
 
   def execute_turn(player, opponent, rank)
     rank == "six" ? rank_word = "sixe" : rank_word = rank
-    self.message = "#{player.name} asked #{opponent.name} for #{rank_word}s &"
+    self.message = "#{player.name} asked #{opponent.name} for #{rank_word}s and"
     if game.make_request(player, opponent, rank).won_cards?
       self.message += " got cards"
     else
       self.message += " went fish"
-      self.message += " & got one" if rank == game.go_fish(player, rank).rank
+      self.message += " and got one" if rank == game.go_fish(player, rank).rank
     end
     if game.game_over?
       end_match
