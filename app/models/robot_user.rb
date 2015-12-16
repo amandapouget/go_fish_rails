@@ -3,7 +3,7 @@ class RobotUser < User
 
   def set_defaults
     self.name ||= User::FAKENAMES.rotate![0]
-    self.email ||= "robot#{(Time.now.to_f * 100000).to_i}@gofish.com"
+    self.email = "robot#{(Time.now.to_f * 100000).to_i}@gofish.com"
     self.think_time ||= 3
   end
 
