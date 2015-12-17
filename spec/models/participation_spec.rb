@@ -6,7 +6,6 @@ RSpec.describe Participation, type: :model do
   let(:participation) { Participation.find_by(match: match, user: user) }
 
   it 'pairs users and matches' do
-    expect(participation.match_id).to eq match.id
     expect(participation.user).to eq user
     expect(participation.match).to eq match
   end

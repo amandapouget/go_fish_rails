@@ -28,7 +28,7 @@ RSpec.describe MatchesController, type: :routing do
     end
 
     it "routes to #start_with_robots via POST" do
-      expect(:post => "/start_with_robots").to route_to("matches#start_with_robots", :num_players => "2")
+      expect(:post => "/start_with_robots").to route_to("matches#start_with_robots")
     end
 
     it "routes to subscribed via POST" do

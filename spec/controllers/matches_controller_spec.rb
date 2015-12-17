@@ -21,6 +21,10 @@ RSpec.describe MatchesController, type: :controller do
       get :new
       expect(assigns(:player_range)).to eq Game::PLAYER_RANGE
     end
+    it "assigns a new match as @match" do
+      get :new
+      expect(assigns(:match)).to be_a_new(Match)
+    end
   end
 
   describe 'POST #create' do

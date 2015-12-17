@@ -1,23 +1,17 @@
-h1 Listing participations
+h1 Participations History
 
 table
   thead
     tr
       th Match
       th User
-      th
-      th
-      th
+      th Points
 
   tbody
     - @participations.each do |participation|
       tr
         td = participation.match_id
         td = participation.user_id
-        td = link_to 'Show', participation
-        td = link_to 'Edit', edit_participation_path(participation)
-        td = link_to 'Destroy', participation, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = participation.points
 
 br
-
-= link_to 'New Participation', new_participation_path
