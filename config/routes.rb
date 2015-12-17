@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   devise_for :users, class_name: 'RealUser', :controllers => {:registrations => "registrations"}
-  resources :users
 
   resources :matches, except: [:edit, :destroy]
   post '/start_with_robots' => 'matches#start_with_robots'
