@@ -1,7 +1,8 @@
 class MatchesController < ApplicationController
-  Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
-
+  before_action :authenticate_user!, except: :simulate_start
   before_action :set_match, only: [:show, :update]
+
+  Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
 
   # GET /matches
   # GET /matches.json

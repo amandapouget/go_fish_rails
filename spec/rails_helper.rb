@@ -11,6 +11,7 @@ require 'pry-byebug'
 require 'socket'
 require 'factory_girl_rails'
 require 'devise'
+Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 Pusher.url = "https://39cc3ae7664f69e97e12:60bb9ff467a643cc4001@api.pusherapp.com/apps/151900"
 
@@ -22,7 +23,6 @@ RSpec.configure do |config|
     Participation.destroy_all
   end
 end
-
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -74,4 +74,7 @@ RSpec.configure do |config|
 
   # Devise needs this
   config.include Devise::TestHelpers, type: :controller
+
+  # Makes the views render during controller tests (so you don't have to write separate /views tests to check what is rendered)
+ config.render_views
 end

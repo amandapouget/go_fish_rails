@@ -1,14 +1,16 @@
 Rails.application.routes.draw do
-  devise_for :users, class_name: 'RealUser', :controllers => {:registrations => "registrations"}
+  root 'matches#new'
 
+  devise_for :users, class_name: 'RealUser', :controllers => {:registrations => "registrations"}
   resources :matches, except: [:edit, :destroy]
   post '/start_with_robots' => 'matches#start_with_robots'
   post '/subscribed' => 'matches#subscribed'
   get '/simulate_start' => 'matches#simulate_start'
 
   get '/participations' => 'participations#index'
-  root 'matches#new'
 
+  get '/api/my_secret_endpoint' => 'api#my_secret_endpoint'
+  get '/api/authenticate' => 'api#authenticate'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
