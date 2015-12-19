@@ -19,7 +19,7 @@ class MatchMaker
     @pending_users ||= Hash.new {|hash, key| hash[key] = []}
   end
 
-  def is_holding(user)
+  def is_holding?(user)
     pending_users.values.flatten.include? user
   end
 

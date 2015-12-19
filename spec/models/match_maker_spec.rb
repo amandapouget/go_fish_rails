@@ -27,8 +27,8 @@ describe MatchMaker do
   end
 
   it 'can tell you if has a user in pending_users' do
-    expect(match_maker.is_holding(user)).to be true
-    expect(match_maker.is_holding(another_user)).to be false
+    expect(match_maker.is_holding?(user)).to be true
+    expect(match_maker.is_holding?(another_user)).to be false
   end
 
   it 'can reset the pending_users to empty' do

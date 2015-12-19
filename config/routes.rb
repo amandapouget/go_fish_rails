@@ -9,8 +9,9 @@ Rails.application.routes.draw do
 
   get '/participations' => 'participations#index'
 
-  get '/api/my_secret_endpoint' => 'api#my_secret_endpoint'
-  get '/api/authenticate' => 'api#authenticate'
+  post '/api/authenticate' => 'api#authenticate'
+  get '/api/new' => 'api#new'
+  post '/api/create' => 'api#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

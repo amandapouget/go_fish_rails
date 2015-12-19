@@ -33,12 +33,14 @@ class MatchesController < ApplicationController
     match_maker.match(current_user, @num_players)
   end
 
+  # POST /subscribed
   def subscribed
     match = match_maker.start_match(current_user) || newly_created_match
     match.users.each { |user| push(match, user) } if match
     return_success
   end
 
+  #
   def start_with_robots
     num_players = params["num_players"].to_i
     match = start_robot_match(num_players) until match
@@ -58,7 +60,7 @@ class MatchesController < ApplicationController
   end
 
   def newly_created_match
-    current_user.matches.sort_by { |match| match.created_at }.last unless match_maker.is_holding(current_user)
+    current_user.matches.sort_by { |match| match.created_at }.last unless match_maker.is_holding?(current_user)
   end
 
   def simulate_start

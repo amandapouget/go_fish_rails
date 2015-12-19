@@ -17,20 +17,26 @@ RSpec.describe MatchesController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { get :new }
+
     it 'assigns @player_range based on allowed range from Game model' do
-      get :new
       expect(assigns(:player_range)).to eq Game::PLAYER_RANGE
     end
+
     it "assigns a new match as @match" do
-      get :new
       expect(assigns(:match)).to be_a_new(Match)
     end
   end
 
   describe 'POST #create' do
+    before { post :create, { num_players: Game::MIN_PLAYERS } }
+
     it 'assigns the num_players as @num_players' do
-      post :create, { num_players: Game::MIN_PLAYERS }
       expect(assigns(:num_players)).to eq Game::MIN_PLAYERS
+    end
+
+    it 'adds the user to match_maker.pending_users' do
+      expect(controller.match_maker.is_holding?(current_user)).to be true
     end
   end
 

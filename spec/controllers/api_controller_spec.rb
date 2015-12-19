@@ -5,30 +5,30 @@ RSpec.describe ApiController, type: :controller do
   include AuthenticationHelper
 
   let(:user) { create(:real_user) }
+  let(:correct_token) { user.authentication_token }
+  let(:incorrect_token) { correct_token.chop }
 
-  describe '#authenticate' do
+  after do
+    controller.match_maker.reset
+  end
+
+  describe 'POST #authenticate' do
     context 'with valid login' do
       before do
         http_login user.email, user.password
-        get :authenticate
+        post :authenticate
       end
 
-      it 'assigns @user' do
-        expect(assigns(:user)).to eq user
-      end
-
-      it 'returns a success message' do
+      it 'returns the user email and authentication_token' do
         expect(response.body).to include user.email
+        expect(response.body).to include user.authentication_token
       end
     end
 
     context 'with invalid login' do
       before do
-        get :authenticate, { email: "fake", password: "fake" }
-      end
-
-      it 'does not assign @user' do
-        expect(assigns(:user)).to eq nil
+        http_login "fake", "fake"
+        post :authenticate
       end
 
       it 'returns an invalid login message' do
@@ -38,23 +38,18 @@ RSpec.describe ApiController, type: :controller do
   end
 
   describe '#authenticate_user_from_token!' do
-    let(:correct_token) { user.authentication_token }
-    let(:incorrect_token) { correct_token.chop }
-
-    def mock_route
-      Rails.application.routes.draw do
-        get '/authenticate_user_from_token!', to: "api#authenticate_user_from_token!"
-      end
-    end
-
-    def reset_routes
-     Rails.application.reload_routes!
-    end
-
     it 'signs in a user if the token matches a user' do
       http_give_token(correct_token)
       current_user = controller.authenticate_user_from_token!
       expect(current_user).not_to be nil
+    end
+
+    def mock_route
+      Rails.application.routes.draw { get '/authenticate_user_from_token!', to: "api#authenticate_user_from_token!" }
+    end
+
+    def reset_routes
+     Rails.application.reload_routes!
     end
 
     it 'returns an invalid token message and 401:unauthorized if the token does not match a user' do
@@ -62,15 +57,76 @@ RSpec.describe ApiController, type: :controller do
       http_give_token(incorrect_token)
       get :authenticate_user_from_token!
       expect(response.body).to match /invalid/i
+      expect(response).to have_http_status(:unauthorized)
       reset_routes
     end
+  end
 
-    # it 'takes roughly the same amount of time to complete when given no token as when given an incorrect token (prevents timing attacks)' do
-    #   http_give_token(incorrect_token)
-    #   incorrect_token_time = Benchmark.measure { get :authenticate_user_from_token! }.real
-    #   http_give_token("")
-    #   no_token_time = Benchmark.measure { get :authenticate_user_from_token! }.real
-    #   expect(incorrect_token_time - no_token_time).to be < 0.001
-    # end
+  describe 'certain routes require a token' do
+    it 'returns invalid without the token' do
+      [->{ get :new }, ->{ post :create }].each do |route|
+        route.call
+        expect(response.body).to match /invalid/i
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  context 'correct_token provided' do
+    before { http_give_token(correct_token) }
+
+    describe 'GET #new' do
+      it 'returns player_range based on allowed range from Game model' do
+        get :new
+        expect(response.body).to match /player_range/
+      end
+    end
+
+    describe 'POST #create' do
+      def create_but_need_one_user
+        (Game::MIN_PLAYERS - 1).times { user_joins_match }
+      end
+
+      def user_joins_match
+        post :create, { num_players: Game::MIN_PLAYERS }
+      end
+
+      context 'not enough users have joined' do
+        it 'does not create a game when there are not enough users' do
+          expect { create_but_need_one_user }.not_to change(Match, :count)
+          expect(controller.match_maker.is_holding?(user)).to be true
+        end
+
+        it 'returns success [wait message?]' do
+          create_but_need_one_user
+          expect(response).to be_success
+        end
+
+        it 'does not trigger a push' do
+          allow(controller).to receive(:push).and_return nil
+          expect(controller).not_to receive(:push)
+          create_but_need_one_user
+        end
+      end
+
+      context 'enough users have joined' do
+        before { create_but_need_one_user }
+
+        it 'creates a game when there are enough users' do
+          expect { user_joins_match }.to change(Match, :count).by(1)
+        end
+
+        it 'returns success [wait message?]' do
+          user_joins_match
+          expect(response).to be_success
+        end
+
+        it 'triggers a push' do
+          allow(controller).to receive(:push).and_return nil
+          expect(controller).to receive(:push)
+          user_joins_match
+        end
+      end
+    end
   end
 end
