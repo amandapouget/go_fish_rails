@@ -40,7 +40,7 @@ class MatchesController < ApplicationController
     return_success
   end
 
-  #
+  # POST /start_with_robots
   def start_with_robots
     num_players = params["num_players"].to_i
     match = start_robot_match(num_players) until match
@@ -49,7 +49,7 @@ class MatchesController < ApplicationController
 
   # PATCH/PUT /matches/1
   # PATCH/PUT /matches/1.json
-  def update # don't understand why I don't have an authenticity_token problem here!!!
+  def update
     opponent = @match.player(User.find(params["opponentUserId"].to_i))
     @match.run_play(@match.player(current_user), opponent, params["rank"])
     return_success

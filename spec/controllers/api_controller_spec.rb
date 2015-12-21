@@ -171,5 +171,44 @@ RSpec.describe ApiController, type: :controller do
         end
       end
     end
+
+    describe 'PATCH/PUT #update' do
+      let(:opponent) { create(:robot_user) }
+      let(:match) { create(:match, :dealt, users: [user, opponent]) }
+      let(:cards) { match.player(user).cards }
+
+      before do
+        post :update, id: match.to_param, opponentUserId: opponent.id, rank: cards.sample.rank
+      end
+
+      it 'causes game play to happen' do
+        match.reload
+        expect(match.player(user).cards).not_to eq cards
+      end
+
+      it 'returns a success message' do
+        expect(response).to be_success
+      end
+    end
+
+    describe 'GET #show' do
+      let(:match) { create(:match, users: [user, create(:robot_user)]) }
+      let(:get_show) { get :show, {id: match.to_param} }
+      let(:get_no_show) { get :show, {id: create(:match).to_param} }
+
+      context 'user is part of the match' do
+        it 'returns the match view of the user' do
+          get_show
+          expect(response.body).to include match.view(user)
+        end
+      end
+
+      context 'user is not part of the match' do
+        it 'returns unauthorized' do
+          get_no_show
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
   end
 end
