@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post '/api/authenticate' => 'api#authenticate'
   get '/api/new' => 'api#new'
   post '/api/create' => 'api#create'
+  post '/api/start_with_robots' => 'api#start_with_robots'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

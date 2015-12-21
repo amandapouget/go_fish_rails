@@ -3,16 +3,10 @@ class MatchMaker
     pending_users[number_of_players] << user
   end
 
-  def start_match(user)
-    pending_users.each do |number_of_players, users|
-      if users.include?(user) && users.length >= number_of_players
-        match = Match.create(users: users.shift(number_of_players))
-        match.game.deal
-        match.save
-        return match
-      end
-    end
-    return nil
+  def start_match(user, robots: false)
+    number_of_players = queue(user) || return
+    add_robots(number_of_players) if robots == true
+    return create_match(number_of_players) if pending_users[number_of_players].length >= number_of_players
   end
 
   def pending_users
@@ -26,4 +20,20 @@ class MatchMaker
   def reset
     @pending_users = Hash.new {|hash, key| hash[key] = []}
   end
+
+  private
+    def queue(user)
+      pending_users.each { |key, value| return key if value.include?(user) }
+      return nil
+    end
+
+    def add_robots(number_of_players)
+      match(RobotUser.create, number_of_players) until pending_users[number_of_players].length == number_of_players
+    end
+
+    def create_match(number_of_players)
+      match = Match.create(users: pending_users[number_of_players].shift(number_of_players))
+      match.game.deal
+      match.save and return match
+    end
 end

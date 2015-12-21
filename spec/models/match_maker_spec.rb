@@ -20,13 +20,19 @@ describe MatchMaker do
     expect(match_maker.start_match(user)).to be_nil
   end
 
+  it 'can make a match with robots when it does not have the right number of users' do
+    match = match_maker.start_match(user, robots: true)
+    expect(match.users).to include user
+    expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
+  end
+
   it 'does not match users wanting different number of opponents' do
     match_maker.match(another_user, 3)
     match = match_maker.start_match(user)
     expect(match).to be_nil
   end
 
-  it 'can tell you if has a user in pending_users' do
+  it 'can tell you if a user in pending_users' do
     expect(match_maker.is_holding?(user)).to be true
     expect(match_maker.is_holding?(another_user)).to be false
   end

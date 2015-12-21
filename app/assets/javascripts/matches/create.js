@@ -25,7 +25,7 @@ $(document).ready(function() {
         readyTracker.setReadyOn();
       });
       channel.bind('send_to_game_event', function(data) {
-        window.location = "../" + data["message"]
+        window.location = "../matches/" + data["message"]
       });
     };
     documentIsReady();

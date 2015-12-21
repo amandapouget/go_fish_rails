@@ -27,12 +27,29 @@ class ApiController < ApplicationController
   def create
     match_maker.match(current_user, params["num_players"].to_i)
     match = match_maker.start_match(current_user)
-    match.users.each { |user| push(match, user) } if match
-    return_success
+    push(match) if match
+    render json: nil, status: :ok
+  end
+
+  # POST /api/start_with_robots
+  def start_with_robots
+    match = match_maker.start_match(current_user, robots: true)
+    if match
+      push(match)
+      render json: nil, status: :ok
+    else
+      render json: { error: 'missing number of players' }, status: :precondition_failed
+    end
   end
 
   def match_maker
     @@match_maker ||= MatchMaker.new
+  end
+
+  def show
+  end
+
+  def update
   end
 
 private
@@ -40,11 +57,9 @@ private
     request.format = :json
   end
 
-  def return_success
-    render json: nil, status: :ok
-  end
-
-  def push(match, user)
-    Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "/matches/#{match.id}" })
+  def push(match)
+    match.users.each do |user|
+      Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "#{match.id}" } )
+    end
   end
 end

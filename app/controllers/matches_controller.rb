@@ -81,7 +81,7 @@ class MatchesController < ApplicationController
     end
 
     def push(match, user)
-      Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "/matches/#{match.id}" })
+      Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "#{match.id}" })
     end
 
     def return_success
