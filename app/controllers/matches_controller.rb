@@ -29,15 +29,9 @@ class MatchesController < ApplicationController
   # POST /matches
   # POST /matches.json
   def create
-    @num_players = params["num_players"].to_i
-    match_maker.match(current_user, @num_players)
-  end
-
-  # POST /subscribed
-  def subscribed
-    match = match_maker.start_match(current_user) || newly_created_match
-    match.users.each { |user| push(match, user) } if match
-    return_success
+    match_maker.match(current_user, params["num_players"].to_i)
+    match = match_maker.start_match(current_user)
+    push(match) if match
   end
 
   # POST /start_with_robots
@@ -52,7 +46,7 @@ class MatchesController < ApplicationController
   def update
     opponent = @match.player(User.find(params["opponentUserId"].to_i))
     @match.run_play(@match.player(current_user), opponent, params["rank"])
-    return_success
+    return success
   end
 
   def match_maker
@@ -80,11 +74,13 @@ class MatchesController < ApplicationController
       match_maker.start_match(current_user)
     end
 
-    def push(match, user)
-      Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "#{match.id}" })
+    def push(match)
+      match.users.each do |user|
+        Pusher.trigger("waiting_for_players_channel_#{user.id}", 'send_to_game_event', { message: "#{match.id}" } )
+      end
     end
 
-    def return_success
+    def success
       render json: nil, status: :ok
     end
 end

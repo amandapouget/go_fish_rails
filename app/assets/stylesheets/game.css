@@ -62,7 +62,7 @@
 
 .pond #speech {
   height: 200px;
-  width: 296px;
+  width: 316px;
   display: inline-block;
   vertical-align: middle;
   background: url("/assets/speech.png") no-repeat;
@@ -71,7 +71,7 @@
 }
 
 .pond #speech #message {
-  width: 237px;
+  width: 257px;
   float: left;
   padding: 10px 12px;
   position: relative;
