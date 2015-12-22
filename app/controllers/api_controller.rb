@@ -1,14 +1,17 @@
 class ApiController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :set_format_to_json
   before_action :authenticate_user_from_token!, except: [:authenticate]
   before_action :set_match, only: [:show, :update]
 
   # POST /api/authenticate
   def authenticate
+    password_correct = false
     authenticate_with_http_basic do |email, password|
       @user = User.find_by_email(email)
-      render json: { error: 'invalid email or password' }, status: :unauthorized unless @user && @user.valid_password?(password)
+      password_correct = @user.valid_password?(password) if @user
     end
+    return render json: { error: 'Invalid email or password' }, status: :unauthorized unless password_correct
   end
 
   def authenticate_user_from_token!
@@ -16,7 +19,7 @@ class ApiController < ApplicationController
       user = User.find_by_authentication_token(token)
       sign_in user, store: false and return current_user if user
     end
-    render json: { error: 'invalid token' }, status: :unauthorized
+    render json: { error: 'Invalid token' }, status: :unauthorized
   end
 
   # GET /api/new

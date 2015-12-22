@@ -6,7 +6,7 @@
         - @match.errors.full_messages.each do |message|
           li = message
 
-  = f.label 'Players in your game'
+  = f.label 'Number of Players'
   br
   ul class='radio-buttons' id='radio_buttons'
     - @player_range.each do |num_players|

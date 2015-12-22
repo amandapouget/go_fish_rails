@@ -22,6 +22,7 @@ RSpec.describe ApiController, type: :controller do
       it 'returns the user email and authentication_token' do
         expect(response.body).to include user.email
         expect(response.body).to include user.authentication_token
+        expect(response.body).to include user.id.to_s
       end
     end
 

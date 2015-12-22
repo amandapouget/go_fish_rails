@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get '/participations' => 'participations#index'
 
+  get '/api/authenticate' => 'api#authenticate'
   post '/api/authenticate' => 'api#authenticate'
   get '/api/matches/new' => 'api#new'
   post '/api/matches' => 'api#create'
