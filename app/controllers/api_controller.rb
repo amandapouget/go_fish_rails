@@ -1,7 +1,6 @@
 class ApiController < MatchesController
   skip_before_action :verify_authenticity_token, :authenticate_user!
   before_action :authenticate_user_from_token!, except: [:authenticate]
-  before_action :set_format_to_json
 
   # POST /api/authenticate
   def authenticate
@@ -20,9 +19,4 @@ class ApiController < MatchesController
     end
     render json: { error: 'Invalid token' }, status: :unauthorized
   end
-
-  private
-    def set_format_to_json
-      request.format = :json
-    end
 end

@@ -15,7 +15,7 @@ RSpec.describe ApiController, type: :controller do
     context 'with valid login' do
       before do
         http_login user.email, user.password
-        post :authenticate
+        post :authenticate, format: :json
       end
 
       it 'returns the user email and authentication_token' do
@@ -28,7 +28,7 @@ RSpec.describe ApiController, type: :controller do
     context 'with invalid login' do
       before do
         http_login "fake", "fake"
-        post :authenticate
+        post :authenticate, format: :json
       end
 
       it 'returns an invalid login message' do
@@ -40,7 +40,7 @@ RSpec.describe ApiController, type: :controller do
   describe '#authenticate_user_from_token!' do
     context 'token matches user' do
       it 'signs in a user' do
-        http_give_token(correct_token)
+        http_give_token correct_token
         current_user = controller.authenticate_user_from_token!
         expect(current_user).not_to be nil
       end
@@ -57,8 +57,8 @@ RSpec.describe ApiController, type: :controller do
     context 'token does not match user' do
       it 'returns invalid and :unauthorized' do
         mock_route
-        http_give_token(incorrect_token)
-        get :authenticate_user_from_token!
+        http_give_token incorrect_token
+        get :authenticate_user_from_token!, format: :json
         expect(response.body).to match /invalid/i
         expect(response).to have_http_status(:unauthorized)
         reset_routes
@@ -67,9 +67,14 @@ RSpec.describe ApiController, type: :controller do
   end
 
   describe 'certain routes require a token' do
+    let(:my_match) { create(:match) }
     it 'returns invalid and :unauthorized without the token' do
-      my_match = create(:match)
-      [->{ get :new }, ->{ post :create }, ->{ patch :update, id: my_match.id }, ->{ get :show, id: my_match.id }].each do |route|
+      [
+        ->{ get :new, format: :json },
+        ->{ post :create, format: :json },
+        ->{ patch :update, format: :json, id: my_match.id },
+        ->{ get :show, format: :json, id: my_match.id }
+      ].each do |route|
         route.call
         expect(response.body).to match /invalid/i
         expect(response).to have_http_status(:unauthorized)
