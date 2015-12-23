@@ -5,19 +5,16 @@ class MatchMaker
     pending_users[number_of_players] << user
   end
 
-  def start_match_thread(user)
-      @@mutex.synchronize {
-        return unless is_holding?(user)
-        match = start_match(user)
-        return match if match
-        sleep 5
-        return start_match(user, add_robots: true)
-      }
+  def start_match_thread(user, seconds = 5)
+    sleep seconds
+    @@mutex.synchronize {
+      return start_match(user) || start_match(user, robots: true)
+    }
   end
 
-  def start_match(user, add_robots: false)
+  def start_match(user, robots: false)
     number_of_players = queue_number(user) || return
-    add_robots(number_of_players) if add_robots
+    add_robots(number_of_players) if robots
     return create_match(number_of_players) if pending_users[number_of_players].length >= number_of_players
   end
 
@@ -46,6 +43,6 @@ class MatchMaker
     def create_match(number_of_players)
       match = Match.create(users: pending_users[number_of_players].shift(number_of_players))
       match.game.deal
-      match.save and return match
+      match.save! and return match
     end
 end

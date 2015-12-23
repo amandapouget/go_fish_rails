@@ -26,13 +26,5 @@ RSpec.describe MatchesController, type: :routing do
     it "routes to #update via PATCH" do
       expect(:patch => "/matches/1").to route_to("matches#update", :id => "1")
     end
-
-    it "routes to #start_with_robots via POST" do
-      expect(:post => "/start_with_robots").to route_to("matches#start_with_robots")
-    end
-
-    it "routes to subscribed via POST" do
-      expect(:post => "/subscribed").to route_to("matches#subscribed")
-    end
   end
 end
