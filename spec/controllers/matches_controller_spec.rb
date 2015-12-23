@@ -40,8 +40,10 @@ RSpec.describe MatchesController, type: :controller do
 
   describe 'POST #create' do
     shared_examples_for "a route format that can create matches" do
-      let(:user_joins_match) { post :create, { format: the_format, num_players: Game::MIN_PLAYERS } }
-      let(:skip_wait_for_more_users) { controller.start_match(0) }
+      let(:user_joins_match) {
+        post :create, { format: the_format, num_players: Game::MIN_PLAYERS }
+        controller.start_match(0)
+      }
       let(:create_match_still_needs_one_user) { (Game::MIN_PLAYERS - 1).times { controller.match_maker.match(create(:real_user), Game::MIN_PLAYERS) } }
 
       context 'enough users join' do
@@ -50,7 +52,6 @@ RSpec.describe MatchesController, type: :controller do
         it 'creates a match' do
           expect {
             user_joins_match
-            skip_wait_for_more_users
           }.to change(Match, :count).by(1)
         end
 
@@ -58,14 +59,13 @@ RSpec.describe MatchesController, type: :controller do
           allow(controller).to receive(:push).and_return nil
           expect(controller).to receive(:push)
           user_joins_match
-          skip_wait_for_more_users
           expect(response).to be_success
         end
       end
 
       context 'not enough users have joined' do
         it 'creates a match with robots' do
-          expect { user_joins_match; skip_wait_for_more_users }.to change(Match, :count)
+          expect { user_joins_match }.to change(Match, :count)
           expect(current_user.matches.order('created_at').last.users.any? { |user| user.is_a? RobotUser }).to be true
         end
 
@@ -73,7 +73,6 @@ RSpec.describe MatchesController, type: :controller do
           allow(controller).to receive(:push).and_return nil
           expect(controller).to receive(:push)
           user_joins_match
-          skip_wait_for_more_users
           expect(response).to be_success
         end
       end
