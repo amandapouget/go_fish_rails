@@ -30,15 +30,10 @@ class MatchesController < ApplicationController
   # POST /matches.json
   def create
     match_maker.match(current_user, params["num_players"].to_i)
-    match = match_maker.start_match(current_user)
-    push(match) if match
-  end
-
-  # POST /start_with_robots
-  def start_with_robots
-    num_players = params["num_players"].to_i
-    match = start_robot_match(num_players) until match
-    redirect_to "/matches/#{match.id}"
+    Thread.start do
+      match = match_maker.start_match_thread(current_user)
+      push(match) if match
+    end
   end
 
   # PATCH/PUT /matches/1
@@ -53,25 +48,10 @@ class MatchesController < ApplicationController
     @@match_maker ||= MatchMaker.new
   end
 
-  def newly_created_match
-    current_user.matches.sort_by { |match| match.created_at }.last unless match_maker.is_holding?(current_user)
-  end
-
-  def simulate_start
-    match = FactoryGirl.create(:match)
-    match.game.deal
-    render json: match.view(match.users[0])
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_match
       @match = Match.find(params[:id])
-    end
-
-    def start_robot_match(num_players)
-      match_maker.match(RobotUser.create, num_players)
-      match_maker.start_match(current_user)
     end
 
     def push(match)

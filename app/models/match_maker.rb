@@ -1,11 +1,23 @@
 class MatchMaker
+  @@mutex = Mutex.new
+
   def match(user, number_of_players)
     pending_users[number_of_players] << user
   end
 
-  def start_match(user, robots: false)
-    number_of_players = queue(user) || return
-    add_robots(number_of_players) if robots == true
+  def start_match_thread(user)
+      @@mutex.synchronize {
+        return unless is_holding?(user)
+        match = start_match(user)
+        return match if match
+        sleep 5
+        return start_match(user, add_robots: true)
+      }
+  end
+
+  def start_match(user, add_robots: false)
+    number_of_players = queue_number(user) || return
+    add_robots(number_of_players) if add_robots
     return create_match(number_of_players) if pending_users[number_of_players].length >= number_of_players
   end
 
@@ -22,7 +34,7 @@ class MatchMaker
   end
 
   private
-    def queue(user)
+    def queue_number(user)
       pending_users.each { |key, value| return key if value.include?(user) }
       return nil
     end

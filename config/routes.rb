@@ -3,9 +3,6 @@ Rails.application.routes.draw do
 
   devise_for :users, class_name: 'RealUser', :controllers => {:registrations => "registrations"}
   resources :matches, except: [:edit, :destroy]
-  post '/start_with_robots' => 'matches#start_with_robots'
-  post '/subscribed' => 'matches#subscribed'
-  get '/simulate_start' => 'matches#simulate_start'
 
   get '/participations' => 'participations#index'
 

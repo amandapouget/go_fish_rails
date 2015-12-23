@@ -1,32 +1,38 @@
 require 'rails_helper'
 
 describe MatchMaker do
+  let(:number_of_players) { 2 }
   let(:match_maker) { MatchMaker.new }
   let(:user) { create(:real_user) }
   let(:another_user) { create(:real_user) }
 
   before do
-    match_maker.match(user, 2)
+    match_maker.match(user, number_of_players)
   end
 
-  it 'makes a match with a dealt game when it has the right number of users' do
-    match_maker.match(another_user, 2)
-    match = match_maker.start_match(user)
-    expect(match.users).to contain_exactly(user, another_user)
-    match.game.players.each { |player| expect(player.cards).not_to be_empty }
+  context 'has the right number of users' do
+    it 'makes a dealt match immediately' do
+      match_maker.match(another_user, number_of_players)
+      match = match_maker.start_match(user)
+      expect(match.users).to contain_exactly(user, another_user)
+      match.game.players.each { |player| expect(player.cards).not_to be_empty }
+    end
   end
 
-  it 'does not make a match when it does not have the right number of users' do
-    expect(match_maker.start_match(user)).to be_nil
+  context 'does not have the right number of users' do
+    it 'adds robots and makes a dealt match' do
+      match = match_maker.start_match(user, add_robots: true)
+      expect(match.users).to include user
+      expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
+    end
   end
 
-  it 'can make a match with robots when it does not have the right number of users' do
-    match = match_maker.start_match(user, robots: true)
-    expect(match.users).to include user
-    expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
+  it 'does not make a match when the user is not in the queue' do
+    match_maker.reset
+    expect(match_maker.start_match(user)).to be nil
   end
 
-  it 'does not match users wanting different number of opponents' do
+  it 'does not match users wanting a different number of opponents' do
     match_maker.match(another_user, 3)
     match = match_maker.start_match(user)
     expect(match).to be_nil

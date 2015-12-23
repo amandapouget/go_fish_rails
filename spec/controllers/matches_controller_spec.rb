@@ -75,23 +75,6 @@ RSpec.describe MatchesController, type: :controller do
     end
   end
 
-  describe 'POST #start_with_robots' do
-    before do
-      post :create, { format: :js, num_players: Game::MIN_PLAYERS }
-      post :start_with_robots, { num_players: Game::MIN_PLAYERS }
-    end
-
-    it 'it creates a match with the user and some robots' do
-      match = controller.newly_created_match
-      expect(match.users).to include current_user
-      expect(match.users.any? { |user| user.is_a? RobotUser }).to be true
-    end
-
-    it 'redirects to the match page' do
-      expect(response).to redirect_to "/matches/#{controller.newly_created_match.to_param}"
-    end
-  end
-
   describe 'GET #show' do
     let(:match) { create(:match, users: [current_user, create(:robot_user)]) }
     let(:get_show) { get :show, {id: match.to_param} }
