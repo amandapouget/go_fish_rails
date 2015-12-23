@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'benchmark'
 
 RSpec.describe ApiController, type: :controller do
   include AuthenticationHelper

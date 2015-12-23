@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   post '/api/authenticate' => 'api#authenticate'
   get '/api/matches/new' => 'api#new'
   post '/api/matches' => 'api#create'
-  post '/api/matches/start_with_robots' => 'api#start_with_robots'
   patch '/api/matches/:id' => 'api#update'
   put '/api/matches/:id' => 'api#update'
   get '/api/matches/:id' => 'api#show'
