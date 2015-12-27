@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   put '/api/matches/:id' => 'api#update'
   get '/api/matches/:id' => 'api#show'
 
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

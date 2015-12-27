@@ -22,7 +22,7 @@ class MatchesController < ApplicationController
     match_maker.match(current_user, params["num_players"].to_i)
     Thread.start { start_match(5) }
     respond_to do |format|
-      format.json { render json: nil, status: :ok }
+      format.json { render_success }
       format.js {}
     end
   end
@@ -32,7 +32,7 @@ class MatchesController < ApplicationController
   def update
     opponent = @match.player(User.find(params["opponentUserId"].to_i))
     @match.run_play(@match.player(current_user), opponent, params["rank"])
-    success
+    render_success
   end
 
   # GET /matches/1
@@ -66,7 +66,7 @@ class MatchesController < ApplicationController
       end
     end
 
-    def success
-      render json: nil, status: :ok
+    def render_success
+      render json: {}, status: :ok
     end
 end
